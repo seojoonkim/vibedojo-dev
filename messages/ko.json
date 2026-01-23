@@ -1,0 +1,239 @@
+{
+  "common": {
+    "appName": "VibeDojo",
+    "login": "로그인",
+    "signup": "입문하기",
+    "logout": "퇴장",
+    "dashboard": "내 도장",
+    "curriculum": "수련",
+    "community": "광장",
+    "showcase": "무림 게시판",
+    "leaderboard": "명예의 전당",
+    "profile": "프로필",
+    "settings": "설정",
+    "loading": "불러오는 중...",
+    "error": "오류가 발생했습니다",
+    "save": "저장",
+    "cancel": "취소",
+    "delete": "삭제",
+    "edit": "수정",
+    "submit": "제출",
+    "search": "검색"
+  },
+  "landing": {
+    "hero": {
+      "badge": "Built with ❤️ by #Hashed",
+      "title1": "바이브 코딩 도장에서",
+      "title2": "단 한 줄의 코드 작성 없이",
+      "title3": "코딩의 무공을 익히세요",
+      "description1": "개발자 채용 없이도 앱을 만들 수 있습니다.",
+      "description2": "바이브코딩",
+      "description3": "은 AI에게 말로 설명하면 코드가 완성되는 새로운 개발 방식입니다.",
+      "description4": "완전 초보",
+      "description5": "도 ",
+      "description6": "6주 만에",
+      "description7": " 나만의 웹사이트, 앱, 게임을 만들 수 있습니다.",
+      "description8": "수강료 0원.",
+      "description9": " 필요한 건 노트북과 아이디어뿐입니다.",
+      "cta": "무료로 시작하기",
+      "secondaryCta": "커리큘럼 미리보기"
+    },
+    "stats": {
+      "parts": "단계 과정",
+      "chapters": "개 챕터",
+      "projects": "실전 프로젝트"
+    },
+    "whyVibeCoding": {
+      "badge": "왜 바이브 코딩인가",
+      "title1": "코딩 공부, ",
+      "title2": "더 이상 필요 없습니다",
+      "title3": "",
+      "subtitle": "문법 외우고, 에러 잡고, 밤새 디버깅하던 시대는 끝났습니다.",
+      "items": {
+        "0": {
+          "title": "아이디어만 있으면 충분합니다",
+          "description": "\"로그인 기능 만들어줘\"라고 말하면 AI가 코드를 작성합니다. 몇 주 걸리던 프로토타입을 오후 반나절이면 완성할 수 있습니다."
+        },
+        "1": {
+          "title": "코드 대신 대화로 개발합니다",
+          "description": "세미콜론 위치를 외울 필요 없습니다. \"버튼 색을 파란색으로 바꿔줘\"처럼 말하면 됩니다. 프로그래밍 언어 대신 한국어로 개발하세요."
+        },
+        "2": {
+          "title": "소비자에서 창작자가 됩니다",
+          "description": "남이 만든 앱에 불만이 있었나요? 이제 직접 만드세요. 나만의 도구, 나만의 서비스, 나만의 비즈니스를 코딩 지식 없이 구현할 수 있습니다."
+        },
+        "3": {
+          "title": "AI와 협업하는 법을 배웁니다",
+          "description": "ChatGPT에 \"앱 만들어줘\"라고만 하면 안 됩니다. AI가 잘하는 일, 못하는 일을 알고 제대로 활용하는 방법을 체계적으로 배웁니다."
+        }
+      }
+    },
+    "dojoSystem": {
+      "badge": "도장 시스템",
+      "title1": "VibeDojo의 ",
+      "title2": "수련 방식",
+      "subtitle": "검증된 커리큘럼 · 함께하는 동료 · 게임처럼 재미있는 성장",
+      "items": {
+        "0": {
+          "title": "삽질 없는 6단계 로드맵",
+          "description": "\"뭐부터 해야 하지?\" 고민 끝. 입문부터 실전까지 순서대로 따라오기만 하면 됩니다. 각 단계는 실제 결과물로 마무리됩니다."
+        },
+        "1": {
+          "title": "막히면 물어볼 사람이 있습니다",
+          "description": "혼자 에러 메시지 검색하다 포기하셨나요? 같은 과정을 밟는 동료들과 실시간으로 질문하고 답을 얻으세요."
+        },
+        "2": {
+          "title": "게임처럼 레벨업합니다",
+          "description": "흰띠에서 시작해 검은띠까지. 과제를 완료하면 XP를 얻고, 띠 색이 바뀝니다. 리더보드에서 내 순위도 확인하세요."
+        },
+        "3": {
+          "title": "이론 NO, 실전 YES",
+          "description": "강의만 듣고 끝나는 교육이 아닙니다. 포트폴리오 사이트, 게임, 봇, 풀스택 앱을 직접 만들고 배포합니다."
+        }
+      }
+    },
+    "projects": {
+      "badge": "뭘 만들 수 있나요",
+      "title1": "6주 후, ",
+      "title2": "이걸 직접 만듭니다",
+      "subtitle": "\"그래서 뭘 만들 수 있는데?\" 라고 물으셨죠. 보여드리겠습니다.",
+      "items": {
+        "0": { "title": "포트폴리오 웹사이트", "description": "나만의 개인 브랜딩 사이트를 만들고 배포하세요.", "part": "Part 3" },
+        "1": { "title": "브라우저 게임", "description": "HTML5 Canvas로 인터랙티브한 게임을 만들어보세요.", "part": "Part 3" },
+        "2": { "title": "랜딩 페이지", "description": "제품이나 서비스를 홍보하는 마케팅 페이지를 제작하세요.", "part": "Part 3" },
+        "3": { "title": "Discord/Slack 봇", "description": "커뮤니티를 위한 자동화 봇을 직접 개발하세요.", "part": "Part 4" },
+        "4": { "title": "풀스택 웹 앱", "description": "데이터베이스와 인증이 포함된 웹 애플리케이션을 구축하세요.", "part": "Part 4" },
+        "5": { "title": "CLI 도구", "description": "업무를 자동화하는 커맨드라인 도구를 만드세요.", "part": "Part 4" },
+        "6": { "title": "API 서버", "description": "RESTful API를 설계하고 백엔드 서버를 구축하세요.", "part": "Part 4" },
+        "7": { "title": "크롬 익스텐션", "description": "브라우저 기능을 확장하는 나만의 확장 프로그램을 만드세요.", "part": "Part 5" },
+        "8": { "title": "Web3 DApp", "description": "블록체인, NFT, 스마트 컨트랙트의 세계로 진입하세요.", "part": "Part 6" }
+      }
+    },
+    "characters": {
+      "badge": "나만의 아바타",
+      "title": "어떤 동물로 수련하시겠습니까?",
+      "subtitle": "32종의 캐릭터 중 하나를 골라 도장에 입문하세요. 띠 색이 바뀔 때마다 캐릭터도 진화합니다."
+    },
+    "quote": {
+      "text1": "VibeDojo에서 배우는 것은 코딩 기술이 아닙니다. ",
+      "text2": "생각을 현실로 만드는 힘",
+      "text3": "입니다.",
+      "author": "— 바이브 코딩 도장의 수련 철학",
+      "description1": "단순한 학습 공간을 넘어, 바이브 코더들이 함께 성장하고 교류하는",
+      "description2": "지속가능한 커뮤니티",
+      "description3": "를 만들어갑니다.",
+      "description4": "모든 과정은 ",
+      "description5": "완전 무료",
+      "description6": "입니다.",
+      "cta": "지금 바로 입문하기"
+    },
+    "footer": {
+      "copyright": "© 2025 VibeDojo by Hashed. All rights reserved.",
+      "terms": "이용약관",
+      "privacy": "개인정보처리방침"
+    }
+  },
+  "auth": {
+    "loginTitle": "도장 입장",
+    "signupTitle": "입문 신청",
+    "email": "이메일",
+    "password": "비밀번호",
+    "confirmPassword": "비밀번호 확인",
+    "forgotPassword": "비밀번호를 잊으셨나요?",
+    "noAccount": "아직 도장에 입문하지 않으셨나요?",
+    "hasAccount": "이미 수련생이신가요?",
+    "continueWithGithub": "GitHub로 입장",
+    "continueWithGoogle": "Google로 입장",
+    "orContinueWith": "또는",
+    "termsAgreement": "입문하시면 도장 규칙과 개인정보 처리방침에 동의하게 됩니다."
+  },
+  "dashboard": {
+    "welcome": "{name} 수련생님, 환영합니다!",
+    "progress": {
+      "title": "수련 진행",
+      "chaptersCompleted": "{completed}/{total}장 완료",
+      "continuelearning": "수련 계속하기"
+    },
+    "stats": {
+      "level": "띠",
+      "xp": "XP",
+      "streak": "연속 수련",
+      "days": "일",
+      "badges": "뱃지"
+    },
+    "recentActivity": "최근 수련"
+  },
+  "curriculum": {
+    "title": "수련 과정",
+    "subtitle": "바이브코딩의 비기를 전수받으세요",
+    "allParts": "전체 보기",
+    "part": "{number}과정",
+    "chapter": "제 {number}장",
+    "completed": "완료",
+    "inProgress": "수련 중",
+    "notStarted": "미시작",
+    "markComplete": "수련 완료",
+    "markIncomplete": "다시 수련",
+    "nextChapter": "다음 수련",
+    "prevChapter": "이전 수련",
+    "parts": {
+      "1": {
+        "title": "입문",
+        "description": "AI 코딩의 기본기를 익히자"
+      },
+      "2": {
+        "title": "기초 무공",
+        "description": "Claude Code 필수 기술 마스터"
+      },
+      "3": {
+        "title": "실전 수련 I",
+        "description": "실제 프로젝트로 실력 단련"
+      },
+      "4": {
+        "title": "실전 수련 II",
+        "description": "프로덕션 레벨 고급 수련"
+      },
+      "5": {
+        "title": "고급 비기",
+        "description": "전문가만 아는 Claude Code 비밀"
+      },
+      "6": {
+        "title": "Web3 무림",
+        "description": "블록체인 세계의 고수가 되자"
+      }
+    }
+  },
+  "community": {
+    "title": "광장",
+    "newPost": "글 남기기",
+    "filters": {
+      "all": "전체",
+      "question": "질문",
+      "discussion": "토론",
+      "showcase": "자랑하기"
+    },
+    "post": {
+      "by": "작성자",
+      "likes": "좋아요",
+      "comments": "댓글",
+      "answer": "답변"
+    }
+  },
+  "gamification": {
+    "levelUp": "승급!",
+    "xpEarned": "+{amount} XP 획득!",
+    "badgeEarned": "뱃지 획득!",
+    "streakBonus": "연속 수련 보너스!",
+    "belts": {
+      "white": "흰띠",
+      "yellow": "노란띠",
+      "orange": "주황띠",
+      "green": "초록띠",
+      "blue": "파란띠",
+      "purple": "보라띠",
+      "brown": "갈색띠",
+      "red": "빨간띠",
+      "black": "검은띠"
+    }
+  }
+}

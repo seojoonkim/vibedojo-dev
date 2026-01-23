@@ -1,0 +1,236 @@
+{
+  "common": {
+    "appName": "VibeDojo",
+    "login": "Login",
+    "signup": "Sign Up",
+    "logout": "Logout",
+    "dashboard": "Dashboard",
+    "curriculum": "Curriculum",
+    "community": "Community",
+    "showcase": "Showcase",
+    "leaderboard": "Leaderboard",
+    "profile": "Profile",
+    "settings": "Settings",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "submit": "Submit",
+    "search": "Search"
+  },
+  "landing": {
+    "hero": {
+      "badge": "Built with ❤️ by #Hashed",
+      "title1": "At VibeDojo,",
+      "title2": "Master the art of coding",
+      "title3": "without writing a single line",
+      "description1": "VibeDojo is where you master the Way of coding with AI.",
+      "description2": "Vibe Coding",
+      "description3": " - Start your creative journey turning ideas into reality.",
+      "description4": "White belt beginner",
+      "description5": " to ",
+      "description6": "Black belt master",
+      "description7": " - Grow through our structured training program.",
+      "description8": "Completely free",
+      "description9": " learning community for vibe coders.",
+      "cta": "Join the Dojo",
+      "secondaryCta": "View Curriculum"
+    },
+    "stats": {
+      "parts": "Training Stages",
+      "chapters": "Chapters",
+      "projects": "Real Projects"
+    },
+    "whyVibeCoding": {
+      "badge": "What is Vibe Coding",
+      "title1": "Why train ",
+      "title2": "Vibe Coding",
+      "title3": " now?",
+      "subtitle": "In the AI era, the way we read and write code is fundamentally changing.",
+      "items": {
+        "0": {
+          "title": "From Idea to Implementation",
+          "description": "The time from idea to code is dramatically shortened. What used to take weeks can now be done in hours. Vibe coding bridges the gap between thought and implementation."
+        },
+        "1": {
+          "title": "Intent-Driven Development",
+          "description": "The key is clearly communicating intent, not memorizing syntax. The ability to express 'what you want to build' becomes a new development skill. Prompt writing becomes as important as coding."
+        },
+        "2": {
+          "title": "Becoming a Creator",
+          "description": "Shift from consumer to producer, from tool user to tool maker. Create your own solutions, modify as needed, and extend as you wish."
+        },
+        "3": {
+          "title": "The Essence of AI Collaboration",
+          "description": "Learn to treat AI as a collaboration partner, not just a tool. Understanding AI's strengths, compensating for its weaknesses, and combining it with human creative judgment is the key to the next era."
+        }
+      }
+    },
+    "dojoSystem": {
+      "badge": "Dojo System",
+      "title1": "VibeDojo's ",
+      "title2": "Training Method",
+      "subtitle": "Structured curriculum, fellow practitioners, belt progression system",
+      "items": {
+        "0": {
+          "title": "6-Step Structured Curriculum",
+          "description": "Master everything about vibe coding step by step, from beginner to advanced. Each part builds on the previous, culminating in real projects."
+        },
+        "1": {
+          "title": "Growing Together",
+          "description": "You don't learn alone. Ask questions, review code, and exchange feedback with fellow learners who share the same goals."
+        },
+        "2": {
+          "title": "Belt Progression System",
+          "description": "A 9-stage journey from white belt to black belt. Earn XP to advance your belt and see your ranking in the dojo."
+        },
+        "3": {
+          "title": "Project-Focused Learning",
+          "description": "Theory alone isn't enough. Build portfolio sites, games, bots, and full-stack apps to prove your skills."
+        }
+      }
+    },
+    "projects": {
+      "badge": "Hands-on Projects",
+      "title1": "Build these ",
+      "title2": "yourself",
+      "subtitle": "Not just theory. Learn by building real, working projects.",
+      "items": {
+        "0": { "title": "Portfolio Website", "description": "Create and deploy your personal branding site.", "part": "Part 3" },
+        "1": { "title": "Browser Game", "description": "Build interactive games with HTML5 Canvas.", "part": "Part 3" },
+        "2": { "title": "Landing Page", "description": "Create marketing pages to promote products or services.", "part": "Part 3" },
+        "3": { "title": "Discord/Slack Bot", "description": "Develop automation bots for your community.", "part": "Part 4" },
+        "4": { "title": "Full-Stack Web App", "description": "Build web applications with database and authentication.", "part": "Part 4" },
+        "5": { "title": "CLI Tool", "description": "Create command-line tools to automate your work.", "part": "Part 4" },
+        "6": { "title": "API Server", "description": "Design RESTful APIs and build backend servers.", "part": "Part 4" },
+        "7": { "title": "Chrome Extension", "description": "Build browser extensions that expand functionality.", "part": "Part 5" },
+        "8": { "title": "Web3 DApp", "description": "Enter the world of blockchain, NFTs, and smart contracts.", "part": "Part 6" }
+      }
+    },
+    "characters": {
+      "badge": "Dojo Members",
+      "title": "Your Training Character",
+      "subtitle": "Choose from 32 animal characters and start your training at the dojo"
+    },
+    "quote": {
+      "text1": "What you learn at VibeDojo is not coding skills. ",
+      "text2": "It's the power to turn thoughts into reality",
+      "text3": ".",
+      "author": "— VibeDojo Training Philosophy",
+      "description1": "Beyond a simple learning space, we're building a",
+      "description2": "sustainable community",
+      "description3": " where vibe coders grow and connect together.",
+      "description4": "All courses are ",
+      "description5": "completely free",
+      "description6": ".",
+      "cta": "Join Now"
+    },
+    "footer": {
+      "copyright": "© 2025 VibeDojo. All rights reserved.",
+      "terms": "Terms of Service",
+      "privacy": "Privacy Policy"
+    }
+  },
+  "auth": {
+    "loginTitle": "Login",
+    "signupTitle": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "forgotPassword": "Forgot password?",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "continueWithGithub": "Continue with GitHub",
+    "continueWithGoogle": "Continue with Google",
+    "orContinueWith": "or",
+    "termsAgreement": "By continuing, you agree to our Terms of Service and Privacy Policy."
+  },
+  "dashboard": {
+    "welcome": "Welcome, {name}!",
+    "progress": {
+      "title": "Learning Progress",
+      "chaptersCompleted": "{completed}/{total} chapters completed",
+      "continuelearning": "Continue Learning"
+    },
+    "stats": {
+      "level": "Level",
+      "xp": "XP",
+      "streak": "Streak",
+      "days": "days",
+      "badges": "Badges"
+    },
+    "recentActivity": "Recent Activity"
+  },
+  "curriculum": {
+    "title": "Curriculum",
+    "subtitle": "Everything about AI-native development",
+    "allParts": "All Parts",
+    "part": "Part {number}",
+    "chapter": "Chapter {number}",
+    "completed": "Completed",
+    "inProgress": "In Progress",
+    "notStarted": "Not Started",
+    "markComplete": "Mark as Complete",
+    "markIncomplete": "Mark as Incomplete",
+    "nextChapter": "Next Chapter",
+    "prevChapter": "Previous Chapter",
+    "parts": {
+      "1": {
+        "title": "Getting Started",
+        "description": "AI coding concepts and Claude Code basics"
+      },
+      "2": {
+        "title": "Core Features",
+        "description": "Master essential Claude Code capabilities"
+      },
+      "3": {
+        "title": "Practical Projects I",
+        "description": "Real-world application development"
+      },
+      "4": {
+        "title": "Practical Projects II",
+        "description": "Production-level applications"
+      },
+      "5": {
+        "title": "Advanced Usage",
+        "description": "Expert-level Claude Code mastery"
+      },
+      "6": {
+        "title": "Web3 Development",
+        "description": "Blockchain and decentralized app development"
+      }
+    }
+  },
+  "community": {
+    "title": "Community",
+    "newPost": "New Post",
+    "filters": {
+      "all": "All",
+      "question": "Questions",
+      "discussion": "Discussions",
+      "showcase": "Showcase"
+    },
+    "post": {
+      "by": "by",
+      "likes": "likes",
+      "comments": "comments",
+      "answer": "answer"
+    }
+  },
+  "gamification": {
+    "levelUp": "Level Up!",
+    "xpEarned": "+{amount} XP",
+    "badgeEarned": "Badge Earned!",
+    "streakBonus": "Streak Bonus!",
+    "levels": {
+      "1": "Newbie",
+      "2": "Explorer",
+      "3": "Builder",
+      "4": "Creator",
+      "5": "Master",
+      "6": "Sensei"
+    }
+  }
+}
