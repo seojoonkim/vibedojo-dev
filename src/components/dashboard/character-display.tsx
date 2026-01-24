@@ -5,6 +5,7 @@ import { getCharacterById, CHARACTERS, type Character } from "@/lib/characters";
 import { CharacterSelectModal } from "@/components/character/character-select";
 import { getBeltByXp } from "@/lib/belt-system";
 import { Pencil } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
 
 interface CharacterDisplayProps {
   initialCharacterId: string;
@@ -21,9 +22,19 @@ export function CharacterDisplay({ initialCharacterId, displayName, totalXp }: C
   const bgPosX = (character.col / 3) * 100;
   const bgPosY = character.row * 100;
 
-  const handleSelect = (newCharacter: Character) => {
+  const handleSelect = async (newCharacter: Character) => {
     setCharacterId(newCharacter.id);
-    // TODO: Save to database
+
+    // Save to database
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (user) {
+      await supabase
+        .from("profiles")
+        .update({ character_id: newCharacter.id })
+        .eq("id", user.id);
+    }
   };
 
   return (
@@ -32,12 +43,12 @@ export function CharacterDisplay({ initialCharacterId, displayName, totalXp }: C
       <CharacterSelectModal currentCharacterId={characterId} currentXp={totalXp} onSelect={handleSelect}>
         <button className="group relative mb-5">
           {/* Outer glow effect */}
-          <div className="absolute -inset-2 bg-stone-400/10 rounded-xl blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="absolute -inset-2 bg-[#daa520]/10 rounded-xl blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
           {/* Traditional frame */}
           <div className="relative">
             <div
-              className="w-28 sm:w-36 h-28 sm:h-36 overflow-hidden transition-all duration-300 group-hover:scale-105 border border-stone-300 group-hover:border-stone-400 rounded-sm shadow-md group-hover:shadow-lg"
+              className="w-28 sm:w-36 h-28 sm:h-36 overflow-hidden transition-all duration-300 group-hover:scale-105 border border-[#30363d] group-hover:border-[#daa520]/50 rounded-md shadow-md group-hover:shadow-lg bg-[#0d1117]"
               style={{
                 backgroundImage: `url(${spriteSheet})`,
                 backgroundSize: "400% 200%",
@@ -47,44 +58,44 @@ export function CharacterDisplay({ initialCharacterId, displayName, totalXp }: C
 
             {/* Belt indicator */}
             <div
-              className="absolute -bottom-2 left-1/2 -translate-x-1/2 h-2.5 sm:h-3 w-16 sm:w-20 rounded-sm border border-stone-300"
+              className="absolute -bottom-2 left-1/2 -translate-x-1/2 h-2.5 sm:h-3 w-16 sm:w-20 rounded-sm border border-[#30363d]"
               style={{
                 backgroundColor: belt.color,
               }}
             />
 
             {/* Hover overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-stone-800/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center pb-4 rounded-sm">
-              <span className="text-xs text-white uppercase tracking-wider font-medium">변경</span>
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0d1117]/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center pb-4 rounded-md">
+              <span className="text-xs text-[#c9d1d9] uppercase tracking-wider font-medium">변경</span>
             </div>
           </div>
 
           {/* Edit button */}
-          <div className="absolute -bottom-1 -right-1 w-7 sm:w-8 h-7 sm:h-8 bg-stone-700 flex items-center justify-center border border-stone-500 rounded-sm shadow-md">
-            <Pencil className="h-3.5 sm:h-4 w-3.5 sm:w-4 text-white" />
+          <div className="absolute -bottom-1 -right-1 w-7 sm:w-8 h-7 sm:h-8 bg-[#21262d] flex items-center justify-center border border-[#30363d] rounded-md shadow-md group-hover:border-[#daa520]/50 transition-colors">
+            <Pencil className="h-3.5 sm:h-4 w-3.5 sm:w-4 text-[#8b949e] group-hover:text-[#daa520] transition-colors" />
           </div>
         </button>
       </CharacterSelectModal>
 
       {/* Character Info */}
       <div className="w-full">
-        <h1 className="text-xl sm:text-2xl font-bold text-stone-800 mb-2">
+        <h1 className="text-xl sm:text-2xl font-bold text-[#c9d1d9] mb-2">
           {displayName}
         </h1>
         <div className="flex items-center justify-center gap-3 mb-3">
-          <span className="text-sm sm:text-base text-stone-600 font-medium">{character.nameKo}</span>
-          <span className="text-stone-400">|</span>
+          <span className="text-sm sm:text-base text-[#8b949e] font-medium">{character.nameKo}</span>
+          <span className="text-[#30363d]">|</span>
           <div className="flex items-center gap-2">
             <div
-              className="w-3.5 sm:w-4 h-2 sm:h-2.5 rounded-sm border border-stone-300"
+              className="w-3.5 sm:w-4 h-2 sm:h-2.5 rounded-sm border border-[#30363d]"
               style={{
                 backgroundColor: belt.color,
               }}
             />
-            <span className="text-sm sm:text-base text-stone-600 font-medium">{belt.nameKo} {belt.rank}</span>
+            <span className="text-sm sm:text-base text-[#8b949e] font-medium">{belt.nameKo} {belt.rank}</span>
           </div>
         </div>
-        <p className="text-xs sm:text-sm text-stone-500">{character.description}</p>
+        <p className="text-xs sm:text-sm text-[#6e7681]">{character.description}</p>
       </div>
     </div>
   );

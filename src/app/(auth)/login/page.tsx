@@ -55,27 +55,22 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-8 bg-gradient-to-b from-stone-100 to-stone-200 relative overflow-hidden">
-      {/* Subtle warm glow background */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-yellow-800/5 rounded-full blur-[120px]" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-stone-600/5 rounded-full blur-[120px]" />
-
-      {/* Wood floor texture overlay */}
-      <div className="fixed inset-0 opacity-[0.02] pointer-events-none" style={{
-        backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(139,90,43,0.2) 60px, rgba(139,90,43,0.2) 61px)`
-      }} />
+    <div className="min-h-screen flex items-center justify-center px-4 py-8 bg-[#0d1117] relative overflow-hidden">
+      {/* Subtle glow background */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#f0b429]/5 rounded-full blur-[120px]" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#79c0ff]/5 rounded-full blur-[120px]" />
 
       {/* Decorative Kanji */}
-      <div className="absolute top-1/2 left-10 -translate-y-1/2 text-[12rem] font-serif text-stone-400/[0.08] select-none pointer-events-none hidden lg:block">
+      <div className="absolute top-1/2 left-10 -translate-y-1/2 text-[12rem] font-serif text-[#f0b429]/[0.03] select-none pointer-events-none hidden lg:block">
         道
       </div>
-      <div className="absolute top-1/2 right-10 -translate-y-1/2 text-[12rem] font-serif text-stone-400/[0.08] select-none pointer-events-none hidden lg:block">
+      <div className="absolute top-1/2 right-10 -translate-y-1/2 text-[12rem] font-serif text-[#f0b429]/[0.03] select-none pointer-events-none hidden lg:block">
         場
       </div>
 
       <div className="w-full max-w-sm relative z-10">
-        {/* Traditional Dojo Card */}
-        <div className="relative bg-white/95 backdrop-blur-sm border border-stone-300 p-6 rounded-sm shadow-lg">
+        {/* GitHub Dark Card */}
+        <div className="relative bg-[#1c2128] backdrop-blur-sm p-6 rounded-lg shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
           {/* Header */}
           <div className="text-center pb-5">
             <Link
@@ -83,12 +78,12 @@ export default function LoginPage() {
               className="inline-flex items-center justify-center gap-1.5 mb-4 group"
             >
               <Icons.vibedojoSymbol className="w-9 h-9 transition-all duration-300" />
-              <span className="font-black text-xl text-stone-800 tracking-tighter group-hover:text-stone-600 transition-colors">
+              <span className="font-black text-xl text-[#c9d1d9] tracking-tighter group-hover:text-[#f0b429] transition-colors">
                 {common("appName")}
               </span>
             </Link>
-            <h1 className="text-lg font-bold text-stone-800 mb-1">{t("loginTitle")}</h1>
-            <p className="text-[11px] text-stone-500">
+            <h1 className="text-lg font-bold text-[#c9d1d9] mb-1">{t("loginTitle")}</h1>
+            <p className="text-[11px] text-[#8b949e]">
               도장에 돌아오신 것을 환영합니다
             </p>
           </div>
@@ -99,7 +94,7 @@ export default function LoginPage() {
             <div className="space-y-2.5">
               <Button
                 variant="outline"
-                className="w-full h-10 text-xs rounded-sm bg-stone-50 border border-stone-300 text-stone-700 hover:bg-stone-100 hover:border-stone-400 hover:text-stone-800 transition-all duration-300"
+                className="w-full h-10 text-xs rounded-lg bg-[#21262d] border-0 text-[#c9d1d9] hover:bg-[#30363d] hover:text-[#c9d1d9] transition-all duration-300 shadow-[0_2px_6px_rgba(0,0,0,0.3)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.4)]"
                 onClick={() => handleOAuthLogin("github")}
                 disabled={isLoading}
               >
@@ -108,7 +103,7 @@ export default function LoginPage() {
               </Button>
               <Button
                 variant="outline"
-                className="w-full h-10 text-xs rounded-sm bg-stone-50 border border-stone-300 text-stone-700 hover:bg-stone-100 hover:border-stone-400 hover:text-stone-800 transition-all duration-300"
+                className="w-full h-10 text-xs rounded-lg bg-[#21262d] border-0 text-[#c9d1d9] hover:bg-[#30363d] hover:text-[#c9d1d9] transition-all duration-300 shadow-[0_2px_6px_rgba(0,0,0,0.3)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.4)]"
                 onClick={() => handleOAuthLogin("google")}
                 disabled={isLoading}
               >
@@ -119,10 +114,10 @@ export default function LoginPage() {
 
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <Separator className="w-full bg-gradient-to-r from-transparent via-stone-300 to-transparent" />
+                <Separator className="w-full bg-gradient-to-r from-transparent via-[#30363d] to-transparent" />
               </div>
               <div className="relative flex justify-center text-[10px] uppercase tracking-wider">
-                <span className="bg-white px-3 text-stone-500">
+                <span className="bg-[#161b22] px-3 text-[#8b949e]">
                   {t("orContinueWith")}
                 </span>
               </div>
@@ -131,7 +126,7 @@ export default function LoginPage() {
             {/* Email Login Form */}
             <form onSubmit={handleEmailLogin} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-xs text-stone-600 uppercase tracking-wider">
+                <Label htmlFor="email" className="text-xs text-[#8b949e] uppercase tracking-wider">
                   {t("email")}
                 </Label>
                 <Input
@@ -142,11 +137,11 @@ export default function LoginPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   disabled={isLoading}
-                  className="h-10 text-xs rounded-sm bg-stone-50 border-stone-300 text-stone-800 placeholder:text-stone-400 focus:border-stone-500 focus:ring-1 focus:ring-stone-400/50 transition-all"
+                  className="h-10 text-xs rounded-lg bg-[#0d1117] border-0 text-[#c9d1d9] placeholder:text-[#484f58] shadow-[inset_0_1px_4px_rgba(0,0,0,0.3)] focus:ring-2 focus:ring-[#f0b429]/30 transition-all"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-xs text-stone-600 uppercase tracking-wider">
+                <Label htmlFor="password" className="text-xs text-[#8b949e] uppercase tracking-wider">
                   {t("password")}
                 </Label>
                 <Input
@@ -156,17 +151,17 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   disabled={isLoading}
-                  className="h-10 text-xs rounded-sm bg-stone-50 border-stone-300 text-stone-800 placeholder:text-stone-400 focus:border-stone-500 focus:ring-1 focus:ring-stone-400/50 transition-all"
+                  className="h-10 text-xs rounded-lg bg-[#0d1117] border-0 text-[#c9d1d9] placeholder:text-[#484f58] shadow-[inset_0_1px_4px_rgba(0,0,0,0.3)] focus:ring-2 focus:ring-[#f0b429]/30 transition-all"
                 />
               </div>
               <Button
                 type="submit"
-                className="w-full h-10 text-xs rounded-sm font-bold uppercase tracking-wider bg-stone-800 hover:bg-stone-700 text-white border-0 shadow-md transition-all duration-300"
+                className="w-full h-10 text-xs rounded-lg font-bold uppercase tracking-wider bg-[#f0b429] hover:bg-[#f7c948] text-[#0d1117] border-0 transition-all duration-300 shadow-[0_2px_8px_rgba(240,180,41,0.3)] hover:shadow-[0_4px_16px_rgba(240,180,41,0.4)]"
                 disabled={isLoading}
               >
                 {isLoading ? (
                   <span className="flex items-center gap-2">
-                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <span className="w-4 h-4 border-2 border-[#0d1117]/30 border-t-[#0d1117] rounded-full animate-spin" />
                     {common("loading")}
                   </span>
                 ) : (
@@ -177,18 +172,18 @@ export default function LoginPage() {
           </div>
 
           {/* Footer */}
-          <div className="flex flex-col space-y-2 text-center text-xs pt-5 mt-5 border-t border-stone-200">
+          <div className="flex flex-col space-y-2 text-center text-xs pt-5 mt-5 shadow-[0_-1px_0_rgba(255,255,255,0.05)]">
             <Link
               href="/forgot-password"
-              className="text-stone-500 hover:text-stone-700 text-[11px] transition-all"
+              className="text-[#8b949e] hover:text-[#f0b429] text-[11px] transition-all"
             >
               {t("forgotPassword")}
             </Link>
-            <p className="text-stone-500">
+            <p className="text-[#8b949e]">
               {t("noAccount")}{" "}
               <Link
                 href="/signup"
-                className="text-stone-700 hover:text-stone-900 font-medium transition-all"
+                className="text-[#f0b429] hover:text-[#f7c948] font-medium transition-all"
               >
                 {common("signup")}
               </Link>
@@ -197,7 +192,7 @@ export default function LoginPage() {
         </div>
 
         {/* Decorative bottom element */}
-        <div className="h-1 w-full mt-4 bg-gradient-to-r from-stone-400/30 via-stone-500/50 to-stone-400/30 rounded-full" />
+        <div className="h-1 w-full mt-4 bg-gradient-to-r from-[#f0b429]/20 via-[#f0b429]/50 to-[#f0b429]/20 rounded-full" />
       </div>
     </div>
   );

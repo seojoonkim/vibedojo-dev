@@ -36,20 +36,21 @@ export function Header({ isLoggedIn = false }: HeaderProps) {
   };
 
   const navItems = [
+    { href: "/dashboard", label: "내 도장", labelShort: "도장" },
     { href: "/curriculum", label: "수련 과정", labelShort: "수련" },
-    { href: "/community", label: "광장", labelShort: "광장" },
-    { href: "/leaderboard", label: "명예의 전당", labelShort: "전당" },
+    { href: "/community", label: "커뮤니티", labelShort: "커뮤니티" },
+    { href: "/leaderboard", label: "리더보드", labelShort: "리더보드" },
   ];
 
   const logoHref = isLoggedIn ? "/dashboard" : "/";
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-stone-300 bg-white/95 backdrop-blur-sm shadow-sm">
+    <header className="sticky top-0 z-50 w-full bg-[#010409]/95 backdrop-blur-md shadow-[0_1px_3px_rgba(0,0,0,0.3)]">
       <div className="container flex h-14 items-center justify-between">
         {/* Logo - left */}
         <Link href={logoHref} className="flex items-center gap-1.5 group">
           <Icons.vibedojoSymbol className="w-7 h-7 sm:w-8 sm:h-8 transition-transform duration-300 group-hover:scale-105" />
-          <span className="text-base sm:text-lg text-stone-800 tracking-tighter font-black group-hover:text-stone-600 transition-colors">
+          <span className="text-base sm:text-lg text-[#c9d1d9] tracking-tighter font-black group-hover:text-[#f0b429] transition-colors">
             VibeDojo
           </span>
         </Link>
@@ -63,15 +64,15 @@ export function Header({ isLoggedIn = false }: HeaderProps) {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "relative flex items-center px-3 lg:px-4 py-1.5 text-sm lg:text-[15px] font-medium transition-all outline-none focus:outline-none focus-visible:outline-none rounded-sm",
+                  "relative flex items-center px-3 lg:px-4 py-1.5 text-sm lg:text-[15px] font-medium transition-all outline-none focus:outline-none focus-visible:outline-none rounded-md",
                   isActive
-                    ? "text-stone-800 bg-stone-100"
-                    : "text-stone-600 hover:text-stone-800 hover:bg-stone-50"
+                    ? "text-[#c9d1d9] bg-[#21262d]"
+                    : "text-[#8b949e] hover:text-[#c9d1d9] hover:bg-[#21262d]/50"
                 )}
               >
                 {/* Active indicator */}
                 {isActive && (
-                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[calc(100%-16px)] h-[2px] bg-stone-700" />
+                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[calc(100%-16px)] h-[2px] bg-[#f0b429]" />
                 )}
                 <span className="relative">{item.label}</span>
               </Link>
@@ -89,7 +90,7 @@ export function Header({ isLoggedIn = false }: HeaderProps) {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="rounded-sm h-8 w-8 sm:h-9 sm:w-9 text-stone-500 hover:text-stone-700 hover:bg-stone-100 border border-transparent hover:border-stone-300 transition-all"
+                    className="rounded-md h-8 w-8 sm:h-9 sm:w-9 text-[#8b949e] hover:text-[#c9d1d9] hover:bg-[#1c2128] border-0 transition-all"
                   >
                     <Icons.settings className="h-4 w-4" />
                     <span className="sr-only">설정</span>
@@ -97,37 +98,28 @@ export function Header({ isLoggedIn = false }: HeaderProps) {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
                   align="end"
-                  className="w-48 bg-white backdrop-blur-sm border-stone-300 outline-none rounded-sm shadow-lg"
+                  className="w-48 bg-[#1c2128] backdrop-blur-sm border-0 outline-none rounded-lg shadow-[0_4px_16px_rgba(0,0,0,0.4)]"
                 >
                   <DropdownMenuItem asChild>
                     <Link
                       href="/settings"
-                      className="flex items-center gap-2 cursor-pointer text-stone-700 focus:text-stone-800 focus:bg-stone-100 focus:outline-none focus-visible:outline-none focus-visible:ring-0 rounded-sm"
+                      className="flex items-center gap-2 cursor-pointer text-[#c9d1d9] focus:text-[#c9d1d9] focus:bg-[#21262d] focus:outline-none focus-visible:outline-none focus-visible:ring-0 rounded-md"
                     >
                       <Icons.settings className="h-4 w-4" />
                       설정
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuSeparator className="bg-stone-200" />
+                  <DropdownMenuSeparator className="bg-[#30363d]/50" />
                   <DropdownMenuItem
                     onClick={handleLogout}
                     disabled={isLoggingOut}
-                    className="flex items-center gap-2 cursor-pointer text-red-600 focus:text-red-700 focus:bg-red-50 focus:outline-none focus-visible:outline-none focus-visible:ring-0 rounded-sm"
+                    className="flex items-center gap-2 cursor-pointer text-[#f85149] focus:text-[#f85149] focus:bg-[#f85149]/10 focus:outline-none focus-visible:outline-none focus-visible:ring-0 rounded-md"
                   >
                     <Icons.logOut className="h-4 w-4" />
                     {isLoggingOut ? "로그아웃 중..." : "로그아웃"}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-              <Button
-                asChild
-                size="sm"
-                className="rounded-sm h-8 sm:h-9 px-3 sm:px-4 text-xs sm:text-sm font-semibold bg-stone-800 hover:bg-stone-700 text-white shadow-md transition-all border-0"
-              >
-                <Link href="/dashboard">
-                  내 도장
-                </Link>
-              </Button>
             </div>
           ) : (
             <div className="hidden md:flex items-center gap-2">
@@ -135,14 +127,14 @@ export function Header({ isLoggedIn = false }: HeaderProps) {
                 asChild
                 variant="outline"
                 size="sm"
-                className="rounded-sm h-8 px-4 text-xs font-medium border-stone-300 text-stone-600 hover:text-stone-800 hover:bg-stone-50 hover:border-stone-400 bg-transparent transition-all"
+                className="rounded-md h-8 px-4 text-xs font-medium border-0 text-[#c9d1d9] hover:text-[#e6edf3] bg-[#1c2128] hover:bg-[#262c36] shadow-[0_1px_3px_rgba(0,0,0,0.25)] transition-all"
               >
                 <Link href="/login">로그인</Link>
               </Button>
               <Button
                 asChild
                 size="sm"
-                className="rounded-sm h-8 px-4 text-xs font-semibold bg-stone-800 hover:bg-stone-700 text-white shadow-md transition-all border-0"
+                className="rounded-md h-8 px-4 text-xs font-semibold bg-[#f0b429] hover:bg-[#f7c948] text-[#0d1117] transition-all border-0"
               >
                 <Link href="/signup">입문하기</Link>
               </Button>
@@ -155,7 +147,7 @@ export function Header({ isLoggedIn = false }: HeaderProps) {
               <Button
                 variant="ghost"
                 size="icon"
-                className="rounded-sm h-8 w-8 sm:h-9 sm:w-9 text-stone-500 hover:text-stone-700 hover:bg-stone-100 border border-transparent hover:border-stone-300 transition-all"
+                className="rounded-md h-8 w-8 sm:h-9 sm:w-9 text-[#8b949e] hover:text-[#c9d1d9] hover:bg-[#1c2128] border-0 transition-all"
               >
                 <Icons.menu className="h-5 w-5" />
                 <span className="sr-only">Toggle menu</span>
@@ -163,17 +155,17 @@ export function Header({ isLoggedIn = false }: HeaderProps) {
             </SheetTrigger>
             <SheetContent
               side="right"
-              className="w-[280px] p-0 bg-white backdrop-blur-sm border-l border-stone-300 rounded-none"
+              className="w-[280px] p-0 bg-[#0d1117] backdrop-blur-sm border-0 rounded-none shadow-[-4px_0_16px_rgba(0,0,0,0.4)]"
             >
               <div className="flex flex-col h-full">
-                <div className="p-4 border-b border-stone-200">
+                <div className="p-4 shadow-[0_1px_0_rgba(255,255,255,0.05)]">
                   <Link
                     href={logoHref}
                     className="flex items-center gap-1.5 group"
                     onClick={() => setIsOpen(false)}
                   >
                     <Icons.vibedojoSymbol className="w-8 h-8 transition-transform duration-300 group-hover:scale-105" />
-                    <span className="text-lg text-stone-800 tracking-tighter font-black group-hover:text-stone-600 transition-colors">
+                    <span className="text-lg text-[#c9d1d9] tracking-tighter font-black group-hover:text-[#f0b429] transition-colors">
                       VibeDojo
                     </span>
                   </Link>
@@ -187,15 +179,15 @@ export function Header({ isLoggedIn = false }: HeaderProps) {
                         href={item.href}
                         onClick={() => setIsOpen(false)}
                         className={cn(
-                          "relative flex items-center px-4 py-3 text-base font-medium transition-all rounded-sm",
+                          "relative flex items-center px-4 py-3 text-base font-medium transition-all rounded-lg",
                           isActive
-                            ? "text-stone-800 bg-stone-100 border border-stone-200"
-                            : "text-stone-600 hover:text-stone-800 hover:bg-stone-50 border border-transparent hover:border-stone-200"
+                            ? "text-[#c9d1d9] bg-[#1c2128] shadow-[0_2px_6px_rgba(0,0,0,0.3)]"
+                            : "text-[#8b949e] hover:text-[#c9d1d9] hover:bg-[#1c2128]/50"
                         )}
                       >
                         {/* Active indicator */}
                         {isActive && (
-                          <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-8 bg-stone-700 rounded-r-full" />
+                          <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-8 bg-[#f0b429] rounded-r-full" />
                         )}
                         {item.label}
                       </Link>
@@ -203,12 +195,12 @@ export function Header({ isLoggedIn = false }: HeaderProps) {
                   })}
                 </nav>
                 {!isLoggedIn && (
-                  <div className="p-4 border-t border-stone-200 space-y-2">
+                  <div className="p-4 shadow-[0_-1px_0_rgba(255,255,255,0.05)] space-y-2">
                     <Button
                       asChild
                       variant="outline"
                       size="default"
-                      className="w-full rounded-sm h-10 text-sm border-stone-300 text-stone-600 hover:text-stone-800 hover:bg-stone-50 hover:border-stone-400 bg-transparent transition-all"
+                      className="w-full rounded-lg h-10 text-sm border-0 text-[#c9d1d9] hover:text-[#e6edf3] bg-[#1c2128] hover:bg-[#262c36] shadow-[0_2px_6px_rgba(0,0,0,0.3)] transition-all"
                     >
                       <Link href="/login" onClick={() => setIsOpen(false)}>
                         로그인
@@ -217,7 +209,7 @@ export function Header({ isLoggedIn = false }: HeaderProps) {
                     <Button
                       asChild
                       size="default"
-                      className="w-full rounded-sm h-10 text-sm font-semibold bg-stone-800 hover:bg-stone-700 text-white shadow-md border-0"
+                      className="w-full rounded-lg h-10 text-sm font-semibold bg-[#f0b429] hover:bg-[#f7c948] text-[#0d1117] border-0 shadow-[0_2px_6px_rgba(0,0,0,0.3)]"
                     >
                       <Link href="/signup" onClick={() => setIsOpen(false)}>
                         입문하기
@@ -226,16 +218,7 @@ export function Header({ isLoggedIn = false }: HeaderProps) {
                   </div>
                 )}
                 {isLoggedIn && (
-                  <div className="p-4 border-t border-stone-200 space-y-2">
-                    <Button
-                      asChild
-                      size="default"
-                      className="w-full rounded-sm h-10 text-sm font-semibold bg-stone-800 hover:bg-stone-700 text-white shadow-md border-0"
-                    >
-                      <Link href="/dashboard" onClick={() => setIsOpen(false)}>
-                        내 도장
-                      </Link>
-                    </Button>
+                  <div className="p-4 shadow-[0_-1px_0_rgba(255,255,255,0.05)] space-y-2">
                     <Button
                       variant="outline"
                       size="default"
@@ -244,7 +227,7 @@ export function Header({ isLoggedIn = false }: HeaderProps) {
                         setIsOpen(false);
                       }}
                       disabled={isLoggingOut}
-                      className="w-full rounded-sm h-10 text-sm border-red-300 text-red-600 hover:text-red-700 hover:bg-red-50 hover:border-red-400 bg-transparent transition-all"
+                      className="w-full rounded-lg h-10 text-sm border-0 text-[#f85149] hover:text-[#f85149] bg-[#f85149]/10 hover:bg-[#f85149]/20 shadow-[0_2px_6px_rgba(0,0,0,0.3)] transition-all"
                     >
                       {isLoggingOut ? "로그아웃 중..." : "로그아웃"}
                     </Button>

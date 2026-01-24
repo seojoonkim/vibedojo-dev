@@ -49,51 +49,51 @@ export const CURRICULUM_DATA: Part[] = [
           "AI 코딩 어시스턴트의 역할과 활용 방법을 배울 수 있습니다.",
           "바이브코딩으로 개발 생산성을 높이는 방법을 알 수 있습니다.",
         ],
-        xpReward: 100,
+        xpReward: 50,
       },
       {
         id: "02",
         part: 1,
-        title: { ko: "Chapter 02: 개발 환경 설정", en: "Chapter 02: Setting Up Development Environment" },
+        title: { ko: "Chapter 02: Claude Code 설치하기", en: "Chapter 02: Installing Claude Code" },
         bullets: [
           "VS Code와 필수 확장 프로그램을 설치할 수 있습니다.",
           "Node.js, npm 등 개발 도구를 설정할 수 있습니다.",
           "Claude Code를 설치하고 API 키를 연동할 수 있습니다.",
         ],
-        xpReward: 100,
+        xpReward: 50,
       },
       {
         id: "03",
         part: 1,
-        title: { ko: "Chapter 03: 첫 번째 Claude 대화", en: "Chapter 03: First Conversation with Claude" },
+        title: { ko: "Chapter 03: 첫 대화 시작하기", en: "Chapter 03: Starting Your First Conversation" },
         bullets: [
           "Claude Code를 실행하고 기본 인터페이스를 익힐 수 있습니다.",
           "자연어로 코드 생성을 요청하는 방법을 배울 수 있습니다.",
           "Claude의 응답을 이해하고 활용할 수 있습니다.",
         ],
-        xpReward: 100,
+        xpReward: 50,
       },
       {
         id: "04",
         part: 1,
-        title: { ko: "Chapter 04: 터미널 기초", en: "Chapter 04: Terminal Basics" },
+        title: { ko: "Chapter 04: 파일 읽고 쓰기", en: "Chapter 04: Reading and Writing Files" },
         bullets: [
           "터미널/커맨드라인의 기본 개념을 이해할 수 있습니다.",
           "필수 명령어 (ls, cd, mkdir, rm 등)를 익힐 수 있습니다.",
           "Claude와 함께 터미널 명령어를 실행할 수 있습니다.",
         ],
-        xpReward: 100,
+        xpReward: 50,
       },
       {
         id: "05",
         part: 1,
-        title: { ko: "Chapter 05: 파일 시스템 탐색", en: "Chapter 05: File System Navigation" },
+        title: { ko: "Chapter 05: 터미널 명령어", en: "Chapter 05: Terminal Commands" },
         bullets: [
           "디렉토리 구조와 경로의 개념을 이해할 수 있습니다.",
           "파일 및 폴더를 생성, 이동, 복사, 삭제할 수 있습니다.",
           "Claude에게 파일 작업을 요청하는 방법을 배울 수 있습니다.",
         ],
-        xpReward: 100,
+        xpReward: 50,
       },
     ],
   },
@@ -120,7 +120,7 @@ export const CURRICULUM_DATA: Part[] = [
       {
         id: "07",
         part: 2,
-        title: { ko: "Chapter 07: 컨텍스트 관리", en: "Chapter 07: Context Management" },
+        title: { ko: "Chapter 07: 컨텍스트와 메모리", en: "Chapter 07: Context and Memory" },
         bullets: [
           "Claude의 컨텍스트 윈도우 개념을 이해할 수 있습니다.",
           "효율적인 파일 참조와 컨텍스트 제공 방법을 배울 수 있습니다.",
@@ -131,7 +131,7 @@ export const CURRICULUM_DATA: Part[] = [
       {
         id: "08",
         part: 2,
-        title: { ko: "Chapter 08: 효과적인 프롬프트 작성", en: "Chapter 08: Writing Effective Prompts" },
+        title: { ko: "Chapter 08: 효과적인 프롬프팅", en: "Chapter 08: Effective Prompting" },
         bullets: [
           "명확하고 구체적인 요청 작성법을 배울 수 있습니다.",
           "단계별 지시와 예시 활용 방법을 익힐 수 있습니다.",
@@ -142,7 +142,7 @@ export const CURRICULUM_DATA: Part[] = [
       {
         id: "09",
         part: 2,
-        title: { ko: "Chapter 09: 코드 탐색과 검색", en: "Chapter 09: Code Navigation and Search" },
+        title: { ko: "Chapter 09: 코드 탐색하기", en: "Chapter 09: Exploring Code" },
         bullets: [
           "Claude를 활용해 코드베이스를 탐색할 수 있습니다.",
           "함수, 클래스, 변수 정의를 빠르게 찾을 수 있습니다.",
@@ -153,7 +153,7 @@ export const CURRICULUM_DATA: Part[] = [
       {
         id: "10",
         part: 2,
-        title: { ko: "Chapter 10: 코드 편집 워크플로우", en: "Chapter 10: Code Editing Workflows" },
+        title: { ko: "Chapter 10: 코드 편집하기", en: "Chapter 10: Editing Code" },
         bullets: [
           "Claude에게 코드 수정을 효과적으로 요청할 수 있습니다.",
           "diff 형식을 이해하고 변경사항을 검토할 수 있습니다.",
@@ -164,7 +164,7 @@ export const CURRICULUM_DATA: Part[] = [
       {
         id: "11",
         part: 2,
-        title: { ko: "Chapter 11: Git 버전 관리", en: "Chapter 11: Git Version Control" },
+        title: { ko: "Chapter 11: Git 기초", en: "Chapter 11: Git Basics" },
         bullets: [
           "Git의 기본 개념과 워크플로우를 이해할 수 있습니다.",
           "Claude와 함께 커밋, 브랜치, 머지 작업을 할 수 있습니다.",
@@ -186,7 +186,7 @@ export const CURRICULUM_DATA: Part[] = [
       {
         id: "12",
         part: 3,
-        title: { ko: "Chapter 12: 포트폴리오 웹사이트 만들기", en: "Chapter 12: Building a Portfolio Website" },
+        title: { ko: "Chapter 12: 프로젝트 메모리", en: "Chapter 12: Project Memory" },
         bullets: [
           "Next.js와 Tailwind CSS로 포트폴리오 구조를 설계할 수 있습니다.",
           "반응형 레이아웃과 컴포넌트를 구현할 수 있습니다.",
@@ -197,7 +197,7 @@ export const CURRICULUM_DATA: Part[] = [
       {
         id: "13",
         part: 3,
-        title: { ko: "Chapter 13: Vercel 배포하기", en: "Chapter 13: Deploying to Vercel" },
+        title: { ko: "Chapter 13: 웹사이트 개발", en: "Chapter 13: Website Development" },
         bullets: [
           "Vercel 계정을 연동하고 프로젝트를 설정할 수 있습니다.",
           "GitHub 연동을 통한 자동 배포를 구성할 수 있습니다.",
@@ -208,7 +208,7 @@ export const CURRICULUM_DATA: Part[] = [
       {
         id: "14",
         part: 3,
-        title: { ko: "Chapter 14: Supabase 데이터베이스 연동", en: "Chapter 14: Supabase Database Integration" },
+        title: { ko: "Chapter 14: 배포하기", en: "Chapter 14: Deployment" },
         bullets: [
           "Supabase 프로젝트를 생성하고 설정할 수 있습니다.",
           "테이블 스키마 설계와 데이터 모델링을 할 수 있습니다.",
@@ -219,7 +219,7 @@ export const CURRICULUM_DATA: Part[] = [
       {
         id: "15",
         part: 3,
-        title: { ko: "Chapter 15: 브라우저 게임 만들기", en: "Chapter 15: Creating Browser Games" },
+        title: { ko: "Chapter 15: 데이터 저장", en: "Chapter 15: Data Storage" },
         bullets: [
           "Canvas API 또는 게임 라이브러리 기초를 배울 수 있습니다.",
           "게임 루프와 상태 관리를 구현할 수 있습니다.",
@@ -230,7 +230,7 @@ export const CURRICULUM_DATA: Part[] = [
       {
         id: "16",
         part: 3,
-        title: { ko: "Chapter 16: 인터랙티브 앱 개발", en: "Chapter 16: Interactive App Development" },
+        title: { ko: "Chapter 16: 미니 게임", en: "Chapter 16: Mini Games" },
         bullets: [
           "React 상태 관리와 사용자 인터랙션을 설계할 수 있습니다.",
           "애니메이션과 트랜지션 효과를 구현할 수 있습니다.",
@@ -263,7 +263,7 @@ export const CURRICULUM_DATA: Part[] = [
       {
         id: "18",
         part: 4,
-        title: { ko: "Chapter 18: Discord/Slack 봇 개발", en: "Chapter 18: Discord/Slack Bot Development" },
+        title: { ko: "Chapter 18: 챗봇 만들기", en: "Chapter 18: Building Chatbots" },
         bullets: [
           "Discord/Slack API와 봇 계정을 설정할 수 있습니다.",
           "메시지 수신 및 응답 로직을 구현할 수 있습니다.",
@@ -274,7 +274,7 @@ export const CURRICULUM_DATA: Part[] = [
       {
         id: "19",
         part: 4,
-        title: { ko: "Chapter 19: REST API 설계", en: "Chapter 19: REST API Design" },
+        title: { ko: "Chapter 19: 백엔드 기초", en: "Chapter 19: Backend Basics" },
         bullets: [
           "RESTful API 설계 원칙과 패턴을 이해할 수 있습니다.",
           "Express/Next.js API 라우트를 구현할 수 있습니다.",
@@ -285,7 +285,7 @@ export const CURRICULUM_DATA: Part[] = [
       {
         id: "20",
         part: 4,
-        title: { ko: "Chapter 20: 풀스택 앱과 인증", en: "Chapter 20: Full-Stack App with Authentication" },
+        title: { ko: "Chapter 20: 풀스택 앱 완성하기", en: "Chapter 20: Completing Full-Stack Apps" },
         bullets: [
           "사용자 인증 시스템을 설계하고 구현할 수 있습니다.",
           "세션, JWT, OAuth 방식을 이해하고 적용할 수 있습니다.",
@@ -307,7 +307,7 @@ export const CURRICULUM_DATA: Part[] = [
       {
         id: "21",
         part: 5,
-        title: { ko: "Chapter 21: 시스템 아키텍처 이해", en: "Chapter 21: Understanding System Architecture" },
+        title: { ko: "Chapter 21: 아키텍처 이해", en: "Chapter 21: Understanding Architecture" },
         bullets: [
           "대규모 애플리케이션 아키텍처 패턴을 이해할 수 있습니다.",
           "마이크로서비스와 모놀리식 구조를 비교할 수 있습니다.",
@@ -318,7 +318,7 @@ export const CURRICULUM_DATA: Part[] = [
       {
         id: "22",
         part: 5,
-        title: { ko: "Chapter 22: 고급 설정 관리", en: "Chapter 22: Advanced Configuration Management" },
+        title: { ko: "Chapter 22: 설정 심화", en: "Chapter 22: Advanced Configuration" },
         bullets: [
           "Claude Code 설정 파일을 심화 학습할 수 있습니다.",
           "프로젝트별 커스텀 설정을 구성할 수 있습니다.",
@@ -329,7 +329,7 @@ export const CURRICULUM_DATA: Part[] = [
       {
         id: "23",
         part: 5,
-        title: { ko: "Chapter 23: 자동화 훅과 커스텀 명령", en: "Chapter 23: Automation Hooks and Custom Commands" },
+        title: { ko: "Chapter 23: Hooks & Commands", en: "Chapter 23: Hooks & Commands" },
         bullets: [
           "Claude Code 훅 시스템을 이해할 수 있습니다.",
           "사전/사후 실행 훅을 구성할 수 있습니다.",
@@ -340,7 +340,7 @@ export const CURRICULUM_DATA: Part[] = [
       {
         id: "24",
         part: 5,
-        title: { ko: "Chapter 24: 특화된 AI 에이전트", en: "Chapter 24: Specialized AI Agents" },
+        title: { ko: "Chapter 24: Agents & Skills", en: "Chapter 24: Agents & Skills" },
         bullets: [
           "에이전트 기반 개발 패러다임을 이해할 수 있습니다.",
           "특정 도메인에 최적화된 에이전트를 설정할 수 있습니다.",
@@ -351,7 +351,7 @@ export const CURRICULUM_DATA: Part[] = [
       {
         id: "25",
         part: 5,
-        title: { ko: "Chapter 25: 스킬과 확장 기능", en: "Chapter 25: Skills and Extensions" },
+        title: { ko: "Chapter 25: MCP 연동", en: "Chapter 25: MCP Integration" },
         bullets: [
           "Claude Code 스킬 시스템을 이해할 수 있습니다.",
           "커스텀 스킬을 개발하고 등록할 수 있습니다.",
@@ -362,7 +362,7 @@ export const CURRICULUM_DATA: Part[] = [
       {
         id: "26",
         part: 5,
-        title: { ko: "Chapter 26: CI/CD 파이프라인", en: "Chapter 26: CI/CD Pipeline Implementation" },
+        title: { ko: "Chapter 26: CI/CD 자동화", en: "Chapter 26: CI/CD Automation" },
         bullets: [
           "GitHub Actions 기반 CI/CD를 구성할 수 있습니다.",
           "자동 테스트와 린트 검사를 설정할 수 있습니다.",
@@ -373,7 +373,7 @@ export const CURRICULUM_DATA: Part[] = [
       {
         id: "27",
         part: 5,
-        title: { ko: "Chapter 27: 팀 협업 워크플로우", en: "Chapter 27: Team Collaboration Workflows" },
+        title: { ko: "Chapter 27: 팀 협업", en: "Chapter 27: Team Collaboration" },
         bullets: [
           "Claude Code를 활용한 코드 리뷰 프로세스를 구축할 수 있습니다.",
           "브랜치 전략과 PR 워크플로우를 최적화할 수 있습니다.",
@@ -395,7 +395,7 @@ export const CURRICULUM_DATA: Part[] = [
       {
         id: "28",
         part: 6,
-        title: { ko: "Chapter 28: 지갑 연동과 토큰/NFT", en: "Chapter 28: Wallet Integration and Token/NFT" },
+        title: { ko: "Chapter 28: Web3 기초", en: "Chapter 28: Web3 Basics" },
         bullets: [
           "Web3 지갑 (MetaMask, Coinbase)을 연동할 수 있습니다.",
           "토큰 잔액 조회와 전송 기능을 구현할 수 있습니다.",
@@ -406,7 +406,7 @@ export const CURRICULUM_DATA: Part[] = [
       {
         id: "29",
         part: 6,
-        title: { ko: "Chapter 29: Farcaster Frames 개발", en: "Chapter 29: Farcaster Frames Development" },
+        title: { ko: "Chapter 29: Farcaster Frames", en: "Chapter 29: Farcaster Frames" },
         bullets: [
           "Farcaster 프로토콜과 Frames 개념을 이해할 수 있습니다.",
           "인터랙티브 Frame 앱을 설계하고 구현할 수 있습니다.",
@@ -417,7 +417,7 @@ export const CURRICULUM_DATA: Part[] = [
       {
         id: "30",
         part: 6,
-        title: { ko: "Chapter 30: Base 스마트 컨트랙트", en: "Chapter 30: Smart Contracts on Base" },
+        title: { ko: "Chapter 30: Base 스마트 컨트랙트", en: "Chapter 30: Base Smart Contracts" },
         bullets: [
           "Solidity 기초와 스마트 컨트랙트 개념을 배울 수 있습니다.",
           "Base 네트워크에 컨트랙트를 배포할 수 있습니다.",

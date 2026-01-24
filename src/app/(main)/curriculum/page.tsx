@@ -107,10 +107,11 @@ export default async function CurriculumPage() {
 
       <div className="container relative py-3 sm:py-4">
         <Tabs defaultValue="all" className="space-y-4">
-          <TabsList className="bg-[#1c2128] backdrop-blur-sm rounded-lg p-2 h-auto flex-wrap gap-2 shadow-[0_4px_12px_rgba(0,0,0,0.35)]">
+          {/* Mobile: horizontal scrollable, Desktop: wrapped */}
+          <TabsList className="bg-[#1c2128] backdrop-blur-sm rounded-lg p-1.5 sm:p-2 h-auto shadow-[0_4px_12px_rgba(0,0,0,0.35)] flex gap-1.5 sm:gap-2 overflow-x-auto sm:flex-wrap scrollbar-hide">
             <TabsTrigger
               value="all"
-              className="rounded-md h-9 px-4 text-sm data-[state=active]:bg-[#f0b429] data-[state=active]:text-[#0d1117] text-[#8b949e] hover:text-[#c9d1d9] transition-all border-0"
+              className="rounded-md h-8 sm:h-9 px-3 sm:px-4 text-xs sm:text-sm data-[state=active]:bg-[#f0b429] data-[state=active]:text-[#0d1117] text-[#8b949e] hover:text-[#c9d1d9] transition-all border-0 shrink-0"
             >
               전체 보기
             </TabsTrigger>
@@ -118,14 +119,14 @@ export default async function CurriculumPage() {
               <TabsTrigger
                 key={part.id}
                 value={String(part.id)}
-                className="rounded-md h-9 px-4 text-sm data-[state=active]:bg-[#f0b429] data-[state=active]:text-[#0d1117] text-[#8b949e] hover:text-[#c9d1d9] transition-all border-0"
+                className="rounded-md h-8 sm:h-9 px-3 sm:px-4 text-xs sm:text-sm data-[state=active]:bg-[#f0b429] data-[state=active]:text-[#0d1117] text-[#8b949e] hover:text-[#c9d1d9] transition-all border-0 shrink-0"
               >
                 Part {part.id}
               </TabsTrigger>
             ))}
           </TabsList>
 
-          <TabsContent value="all" className="space-y-8 mt-4">
+          <TabsContent value="all" className="space-y-6 sm:space-y-8 mt-4">
             {CURRICULUM_DATA.map((part, partIndex) => {
               const completedInPart = part.chapters.filter(c => completedChapterIds.includes(c.id)).length;
               const partProgress = Math.round((completedInPart / part.chapters.length) * 100);
@@ -133,11 +134,11 @@ export default async function CurriculumPage() {
               const isPartComplete = partProgress === 100;
 
               return (
-                <div key={part.id} className="space-y-4">
+                <div key={part.id} className="space-y-3 sm:space-y-4">
                   {/* Part Header with Image */}
                   <div className="relative rounded-lg overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.4)] group hover:shadow-[0_8px_24px_rgba(0,0,0,0.5)] transition-all duration-500">
                     {/* Background Image */}
-                    <div className="relative aspect-[5/1] overflow-hidden">
+                    <div className="relative aspect-[3/1] sm:aspect-[5/1] overflow-hidden">
                       <Image
                         src={PART_IMAGES[part.id]}
                         alt={part.subtitle.ko}
@@ -149,7 +150,7 @@ export default async function CurriculumPage() {
                       <div className="absolute inset-0 bg-gradient-to-t from-[#0d1117]/70 via-transparent to-transparent" />
 
                       {/* Part Number Badge */}
-                      <div className={`absolute top-3 left-3 px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-md backdrop-blur-sm font-mono ${
+                      <div className={`absolute top-2 sm:top-3 left-2 sm:left-3 px-2 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-md backdrop-blur-sm font-mono ${
                         isPartActive
                           ? 'bg-[#f0b429] text-[#0d1117]'
                           : isPartComplete
@@ -161,33 +162,32 @@ export default async function CurriculumPage() {
 
                       {/* Complete Badge */}
                       {isPartComplete && (
-                        <div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-1 bg-[#1c2128]/80 backdrop-blur-sm rounded-md shadow-[0_2px_8px_rgba(86,211,100,0.2)]">
-                          <Icons.check className="h-3 w-3 text-[#56d364]" />
-                          <span className="text-[10px] font-medium text-[#56d364] uppercase tracking-wider font-mono">완료</span>
+                        <div className="absolute top-2 sm:top-3 right-2 sm:right-3 flex items-center gap-1 px-1.5 sm:px-2 py-0.5 sm:py-1 bg-[#1c2128]/80 backdrop-blur-sm rounded-md shadow-[0_2px_8px_rgba(86,211,100,0.2)]">
+                          <Icons.check className="h-2.5 sm:h-3 w-2.5 sm:w-3 text-[#56d364]" />
+                          <span className="text-[8px] sm:text-[10px] font-medium text-[#56d364] uppercase tracking-wider font-mono">완료</span>
                         </div>
                       )}
 
                       {/* Content Overlay */}
-                      <div className="absolute bottom-0 left-0 right-0 p-5">
-                        <h2 className="text-2xl sm:text-2xl font-bold text-[#c9d1d9] mb-1.5">
+                      <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-5">
+                        <h2 className="text-base sm:text-2xl font-bold text-[#c9d1d9] mb-0.5 sm:mb-1.5">
                           {part.subtitle.ko}
                         </h2>
-                        <p className="text-sm text-[#8b949e] mb-3 max-w-xl">
+                        <p className="text-xs sm:text-sm text-[#8b949e] mb-2 sm:mb-3 max-w-xl line-clamp-1 sm:line-clamp-none">
                           {part.description.ko}
                         </p>
 
                         {/* Progress */}
-                        <div className="flex items-center gap-4">
-                          <span className="text-sm text-[#8b949e] font-mono">{part.chapters.length} Chapters</span>
-                          <span className="text-[#30363d]">·</span>
-                          <div className="flex items-center gap-2">
-                            <div className="w-28 h-2 bg-[#21262d]/60 overflow-hidden rounded-full backdrop-blur-sm shadow-[inset_0_1px_3px_rgba(0,0,0,0.3)]">
+                        <div className="flex items-center gap-2 sm:gap-4">
+                          <span className="text-xs sm:text-sm text-[#8b949e] font-mono">{part.chapters.length} Ch</span>
+                          <div className="flex items-center gap-1.5 sm:gap-2">
+                            <div className="w-16 sm:w-28 h-1.5 sm:h-2 bg-[#21262d]/60 overflow-hidden rounded-full backdrop-blur-sm shadow-[inset_0_1px_3px_rgba(0,0,0,0.3)]">
                               <div
                                 className={`h-full transition-all duration-500 rounded-full ${isPartComplete ? 'bg-[#56d364]' : 'bg-gradient-to-r from-[#f0b429] to-[#56d364]'}`}
                                 style={{ width: `${partProgress}%` }}
                               />
                             </div>
-                            <span className={`text-sm font-mono font-bold ${
+                            <span className={`text-xs sm:text-sm font-mono font-bold ${
                               isPartComplete ? 'text-[#56d364]' : isPartActive ? 'text-[#f0b429]' : 'text-[#484f58]'
                             }`}>
                               {completedInPart}/{part.chapters.length}
@@ -199,7 +199,7 @@ export default async function CurriculumPage() {
                   </div>
 
                   {/* Chapters */}
-                  <div className="grid gap-3 pl-10">
+                  <div className="grid gap-2 sm:gap-3 pl-0 sm:pl-10">
                     {part.chapters.map((chapter, chapterIndex) => {
                       const status = getChapterStatus(chapter.id);
                       const isCompleted = status === "completed";
@@ -216,7 +216,7 @@ export default async function CurriculumPage() {
                         } ${!isNotStarted ? 'hover:shadow-[0_8px_24px_rgba(240,180,41,0.15)] hover:-translate-y-0.5' : 'cursor-not-allowed'}`}>
 
                           {/* Chapter Number Area */}
-                          <div className={`shrink-0 w-18 flex flex-col items-center justify-center text-center py-4 ${
+                          <div className={`shrink-0 w-14 sm:w-18 flex flex-col items-center justify-center text-center py-3 sm:py-4 ${
                             isActive
                               ? 'bg-[#f0b429]'
                               : isCompleted
@@ -224,19 +224,19 @@ export default async function CurriculumPage() {
                                 : 'bg-[#21262d]'
                           }`}>
                             {isNotStarted ? (
-                              <Icons.lock className="h-5 w-5 text-[#484f58]" />
+                              <Icons.lock className="h-4 sm:h-5 w-4 sm:w-5 text-[#484f58]" />
                             ) : (
                               <>
-                                <span className={`text-[10px] font-medium uppercase tracking-wider font-mono ${isActive || isCompleted ? 'text-[#0d1117]/70' : 'text-[#484f58]'}`}>Ch</span>
-                                <span className={`text-2xl font-bold font-mono ${isActive || isCompleted ? 'text-[#0d1117]' : 'text-[#484f58]'}`}>{chapter.id}</span>
+                                <span className={`text-[8px] sm:text-[10px] font-medium uppercase tracking-wider font-mono ${isActive || isCompleted ? 'text-[#0d1117]/70' : 'text-[#484f58]'}`}>Ch</span>
+                                <span className={`text-lg sm:text-2xl font-bold font-mono ${isActive || isCompleted ? 'text-[#0d1117]' : 'text-[#484f58]'}`}>{chapter.id}</span>
                               </>
                             )}
                           </div>
 
-                          <div className="flex-1 flex items-center gap-4 p-4">
+                          <div className="flex-1 flex items-center gap-2 sm:gap-4 p-2.5 sm:p-4">
                             <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2.5 mb-2 flex-wrap">
-                                <h3 className={`font-bold text-base transition-colors ${
+                              <div className="flex items-center gap-1.5 sm:gap-2.5 mb-1 sm:mb-2 flex-wrap">
+                                <h3 className={`font-bold text-sm sm:text-base transition-colors ${
                                   isActive
                                     ? 'text-[#c9d1d9] group-hover:text-[#f0b429]'
                                     : isCompleted
@@ -245,24 +245,25 @@ export default async function CurriculumPage() {
                                 }`}>
                                   {removeChapterPrefix(chapter.title.ko)}
                                 </h3>
-                                <span className={`text-sm font-mono ${isActive || isCompleted ? 'text-[#8b949e]' : 'text-[#30363d]'}`}>+{chapter.xpReward} XP</span>
+                                <span className={`text-xs sm:text-sm font-mono ${isActive || isCompleted ? 'text-[#8b949e]' : 'text-[#30363d]'}`}>+{chapter.xpReward} XP</span>
                                 {isCompleted && (
-                                  <div className="flex items-center gap-1 px-2 py-0.5 bg-[#56d364]/10 rounded-md shadow-[0_1px_3px_rgba(86,211,100,0.2)]">
-                                    <Icons.check className="h-3 w-3 text-[#56d364]" />
-                                    <span className="text-xs font-medium text-[#56d364] uppercase tracking-wider font-mono">완료</span>
+                                  <div className="flex items-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 py-0.5 bg-[#56d364]/10 rounded-md shadow-[0_1px_3px_rgba(86,211,100,0.2)]">
+                                    <Icons.check className="h-2.5 sm:h-3 w-2.5 sm:w-3 text-[#56d364]" />
+                                    <span className="text-[10px] sm:text-xs font-medium text-[#56d364] uppercase tracking-wider font-mono">완료</span>
                                   </div>
                                 )}
                                 {isActive && (
-                                  <Badge className="bg-[#f0b429] text-[#0d1117] border-0 text-xs h-5 font-medium animate-pulse rounded-md font-mono shadow-[0_2px_6px_rgba(240,180,41,0.3)]">
+                                  <Badge className="bg-[#f0b429] text-[#0d1117] border-0 text-[10px] sm:text-xs h-4 sm:h-5 font-medium animate-pulse rounded-md font-mono shadow-[0_2px_6px_rgba(240,180,41,0.3)]">
                                     수련 중
                                   </Badge>
                                 )}
                                 {isNotStarted && (
-                                  <span className="text-xs text-[#484f58]">이전 챕터를 먼저 완료하세요</span>
+                                  <span className="text-[10px] sm:text-xs text-[#484f58] hidden sm:inline">이전 챕터를 먼저 완료하세요</span>
                                 )}
                               </div>
+                              {/* Hide bullets on mobile */}
                               {chapter.bullets && (
-                                <ul className="space-y-1">
+                                <ul className="space-y-1 hidden sm:block">
                                   {chapter.bullets.map((bullet, idx) => (
                                     <li key={idx} className={`text-sm flex items-start gap-2 ${
                                       isActive || isCompleted ? 'text-[#8b949e]' : 'text-[#484f58]'
@@ -276,9 +277,9 @@ export default async function CurriculumPage() {
                             </div>
                             <div className="shrink-0 flex items-center justify-center">
                               {isNotStarted ? (
-                                <Icons.lock className="h-5 w-5 text-[#30363d]" />
+                                <Icons.lock className="h-4 sm:h-5 w-4 sm:w-5 text-[#30363d]" />
                               ) : (
-                                <Icons.chevronRight className={`h-7 w-7 transition-all ${
+                                <Icons.chevronRight className={`h-5 sm:h-7 w-5 sm:w-7 transition-all ${
                                   isActive
                                     ? 'text-[#f0b429] group-hover:translate-x-1'
                                     : isCompleted
@@ -323,11 +324,11 @@ export default async function CurriculumPage() {
 
             return (
               <TabsContent key={part.id} value={String(part.id)} className="mt-4">
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   {/* Part Header with Image */}
                   <div className="relative rounded-lg overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.4)] group hover:shadow-[0_8px_24px_rgba(0,0,0,0.5)] transition-all duration-500">
                     {/* Background Image */}
-                    <div className="relative aspect-[5/1] overflow-hidden">
+                    <div className="relative aspect-[3/1] sm:aspect-[5/1] overflow-hidden">
                       <Image
                         src={PART_IMAGES[part.id]}
                         alt={part.subtitle.ko}
@@ -339,7 +340,7 @@ export default async function CurriculumPage() {
                       <div className="absolute inset-0 bg-gradient-to-t from-[#0d1117]/70 via-transparent to-transparent" />
 
                       {/* Part Number Badge */}
-                      <div className={`absolute top-3 left-3 px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-md backdrop-blur-sm font-mono ${
+                      <div className={`absolute top-2 sm:top-3 left-2 sm:left-3 px-2 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-md backdrop-blur-sm font-mono ${
                         isPartActive
                           ? 'bg-[#f0b429] text-[#0d1117]'
                           : isPartComplete
@@ -351,33 +352,32 @@ export default async function CurriculumPage() {
 
                       {/* Complete Badge */}
                       {isPartComplete && (
-                        <div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-1 bg-[#1c2128]/80 backdrop-blur-sm rounded-md shadow-[0_2px_8px_rgba(86,211,100,0.2)]">
-                          <Icons.check className="h-3 w-3 text-[#56d364]" />
-                          <span className="text-[10px] font-medium text-[#56d364] uppercase tracking-wider font-mono">완료</span>
+                        <div className="absolute top-2 sm:top-3 right-2 sm:right-3 flex items-center gap-1 px-1.5 sm:px-2 py-0.5 sm:py-1 bg-[#1c2128]/80 backdrop-blur-sm rounded-md shadow-[0_2px_8px_rgba(86,211,100,0.2)]">
+                          <Icons.check className="h-2.5 sm:h-3 w-2.5 sm:w-3 text-[#56d364]" />
+                          <span className="text-[8px] sm:text-[10px] font-medium text-[#56d364] uppercase tracking-wider font-mono">완료</span>
                         </div>
                       )}
 
                       {/* Content Overlay */}
-                      <div className="absolute bottom-0 left-0 right-0 p-5">
-                        <h2 className="text-2xl sm:text-2xl font-bold text-[#c9d1d9] mb-1.5">
+                      <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-5">
+                        <h2 className="text-base sm:text-2xl font-bold text-[#c9d1d9] mb-0.5 sm:mb-1.5">
                           {part.subtitle.ko}
                         </h2>
-                        <p className="text-sm text-[#8b949e] mb-3 max-w-xl">
+                        <p className="text-xs sm:text-sm text-[#8b949e] mb-2 sm:mb-3 max-w-xl line-clamp-1 sm:line-clamp-none">
                           {part.description.ko}
                         </p>
 
                         {/* Progress */}
-                        <div className="flex items-center gap-4">
-                          <span className="text-sm text-[#8b949e] font-mono">{part.chapters.length} Chapters</span>
-                          <span className="text-[#30363d]">·</span>
-                          <div className="flex items-center gap-2">
-                            <div className="w-28 h-2 bg-[#21262d]/60 overflow-hidden rounded-full backdrop-blur-sm shadow-[inset_0_1px_3px_rgba(0,0,0,0.3)]">
+                        <div className="flex items-center gap-2 sm:gap-4">
+                          <span className="text-xs sm:text-sm text-[#8b949e] font-mono">{part.chapters.length} Ch</span>
+                          <div className="flex items-center gap-1.5 sm:gap-2">
+                            <div className="w-16 sm:w-28 h-1.5 sm:h-2 bg-[#21262d]/60 overflow-hidden rounded-full backdrop-blur-sm shadow-[inset_0_1px_3px_rgba(0,0,0,0.3)]">
                               <div
                                 className={`h-full transition-all duration-500 rounded-full ${isPartComplete ? 'bg-[#56d364]' : 'bg-gradient-to-r from-[#f0b429] to-[#56d364]'}`}
                                 style={{ width: `${partProgress}%` }}
                               />
                             </div>
-                            <span className={`text-sm font-mono font-bold ${
+                            <span className={`text-xs sm:text-sm font-mono font-bold ${
                               isPartComplete ? 'text-[#56d364]' : isPartActive ? 'text-[#f0b429]' : 'text-[#484f58]'
                             }`}>
                               {completedInPart}/{part.chapters.length}
@@ -389,7 +389,7 @@ export default async function CurriculumPage() {
                   </div>
 
                   {/* Chapters Grid */}
-                  <div className="grid gap-3 pl-10">
+                  <div className="grid gap-2 sm:gap-3 pl-0 sm:pl-10">
                     {part.chapters.map((chapter) => {
                       const status = getChapterStatus(chapter.id);
                       const isCompleted = status === "completed";
@@ -406,7 +406,7 @@ export default async function CurriculumPage() {
                         } ${!isNotStarted ? 'hover:shadow-[0_8px_24px_rgba(240,180,41,0.15)] hover:-translate-y-0.5' : 'cursor-not-allowed'}`}>
 
                           {/* Chapter Number Area */}
-                          <div className={`shrink-0 w-18 flex flex-col items-center justify-center text-center py-4 ${
+                          <div className={`shrink-0 w-14 sm:w-18 flex flex-col items-center justify-center text-center py-3 sm:py-4 ${
                             isActive
                               ? 'bg-[#f0b429]'
                               : isCompleted
@@ -414,19 +414,19 @@ export default async function CurriculumPage() {
                                 : 'bg-[#21262d]'
                           }`}>
                             {isNotStarted ? (
-                              <Icons.lock className="h-5 w-5 text-[#484f58]" />
+                              <Icons.lock className="h-4 sm:h-5 w-4 sm:w-5 text-[#484f58]" />
                             ) : (
                               <>
-                                <span className={`text-[10px] font-medium uppercase tracking-wider font-mono ${isActive || isCompleted ? 'text-[#0d1117]/70' : 'text-[#484f58]'}`}>Ch</span>
-                                <span className={`text-2xl font-bold font-mono ${isActive || isCompleted ? 'text-[#0d1117]' : 'text-[#484f58]'}`}>{chapter.id}</span>
+                                <span className={`text-[8px] sm:text-[10px] font-medium uppercase tracking-wider font-mono ${isActive || isCompleted ? 'text-[#0d1117]/70' : 'text-[#484f58]'}`}>Ch</span>
+                                <span className={`text-lg sm:text-2xl font-bold font-mono ${isActive || isCompleted ? 'text-[#0d1117]' : 'text-[#484f58]'}`}>{chapter.id}</span>
                               </>
                             )}
                           </div>
 
-                          <div className="flex-1 flex items-center gap-4 p-4">
+                          <div className="flex-1 flex items-center gap-2 sm:gap-4 p-2.5 sm:p-4">
                             <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2.5 mb-2 flex-wrap">
-                                <h3 className={`font-bold text-base transition-colors ${
+                              <div className="flex items-center gap-1.5 sm:gap-2.5 mb-1 sm:mb-2 flex-wrap">
+                                <h3 className={`font-bold text-sm sm:text-base transition-colors ${
                                   isActive
                                     ? 'text-[#c9d1d9] group-hover:text-[#f0b429]'
                                     : isCompleted
@@ -435,24 +435,25 @@ export default async function CurriculumPage() {
                                 }`}>
                                   {removeChapterPrefix(chapter.title.ko)}
                                 </h3>
-                                <span className={`text-sm font-mono ${isActive || isCompleted ? 'text-[#8b949e]' : 'text-[#30363d]'}`}>+{chapter.xpReward} XP</span>
+                                <span className={`text-xs sm:text-sm font-mono ${isActive || isCompleted ? 'text-[#8b949e]' : 'text-[#30363d]'}`}>+{chapter.xpReward} XP</span>
                                 {isCompleted && (
-                                  <div className="flex items-center gap-1 px-2 py-0.5 bg-[#56d364]/10 rounded-md shadow-[0_1px_3px_rgba(86,211,100,0.2)]">
-                                    <Icons.check className="h-3 w-3 text-[#56d364]" />
-                                    <span className="text-xs font-medium text-[#56d364] uppercase tracking-wider font-mono">완료</span>
+                                  <div className="flex items-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 py-0.5 bg-[#56d364]/10 rounded-md shadow-[0_1px_3px_rgba(86,211,100,0.2)]">
+                                    <Icons.check className="h-2.5 sm:h-3 w-2.5 sm:w-3 text-[#56d364]" />
+                                    <span className="text-[10px] sm:text-xs font-medium text-[#56d364] uppercase tracking-wider font-mono">완료</span>
                                   </div>
                                 )}
                                 {isActive && (
-                                  <Badge className="bg-[#f0b429] text-[#0d1117] border-0 text-xs h-5 font-medium animate-pulse rounded-md font-mono shadow-[0_2px_6px_rgba(240,180,41,0.3)]">
+                                  <Badge className="bg-[#f0b429] text-[#0d1117] border-0 text-[10px] sm:text-xs h-4 sm:h-5 font-medium animate-pulse rounded-md font-mono shadow-[0_2px_6px_rgba(240,180,41,0.3)]">
                                     수련 중
                                   </Badge>
                                 )}
                                 {isNotStarted && (
-                                  <span className="text-xs text-[#484f58]">이전 챕터를 먼저 완료하세요</span>
+                                  <span className="text-[10px] sm:text-xs text-[#484f58] hidden sm:inline">이전 챕터를 먼저 완료하세요</span>
                                 )}
                               </div>
+                              {/* Hide bullets on mobile */}
                               {chapter.bullets && (
-                                <ul className="space-y-1">
+                                <ul className="space-y-1 hidden sm:block">
                                   {chapter.bullets.map((bullet, idx) => (
                                     <li key={idx} className={`text-sm flex items-start gap-2 ${
                                       isActive || isCompleted ? 'text-[#8b949e]' : 'text-[#484f58]'
@@ -466,9 +467,9 @@ export default async function CurriculumPage() {
                             </div>
                             <div className="shrink-0 flex items-center justify-center">
                               {isNotStarted ? (
-                                <Icons.lock className="h-5 w-5 text-[#30363d]" />
+                                <Icons.lock className="h-4 sm:h-5 w-4 sm:w-5 text-[#30363d]" />
                               ) : (
-                                <Icons.chevronRight className={`h-7 w-7 transition-all ${
+                                <Icons.chevronRight className={`h-5 sm:h-7 w-5 sm:w-7 transition-all ${
                                   isActive
                                     ? 'text-[#f0b429] group-hover:translate-x-1'
                                     : isCompleted

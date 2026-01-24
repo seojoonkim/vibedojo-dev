@@ -72,59 +72,59 @@ export default async function LeaderboardPage() {
             <h3 className="font-semibold text-base text-[#c9d1d9]">XP 획득 방법</h3>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+          <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3">
             {/* 챕터 완료 */}
-            <div className="flex flex-col items-center gap-2 p-4 bg-[#0d1117] rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.3)] hover:shadow-[0_4px_12px_rgba(240,180,41,0.1)] transition-all">
-              <div className="w-10 h-10 flex items-center justify-center bg-[#79c0ff]/10 rounded-lg shadow-[0_2px_4px_rgba(0,0,0,0.2)]">
-                <BookOpen className="h-5 w-5 text-[#79c0ff]" />
+            <div className="flex flex-col items-center gap-1.5 sm:gap-2 p-3 sm:p-4 bg-[#0d1117] rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.3)] hover:shadow-[0_4px_12px_rgba(240,180,41,0.1)] transition-all">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center bg-[#79c0ff]/10 rounded-lg shadow-[0_2px_4px_rgba(0,0,0,0.2)]">
+                <BookOpen className="h-4 w-4 sm:h-5 sm:w-5 text-[#79c0ff]" />
               </div>
               <div className="text-center">
-                <p className="text-xs text-[#8b949e]">챕터 완료</p>
-                <p className="text-sm font-bold text-[#f0b429] font-mono mt-0.5">+50~250</p>
+                <p className="text-[10px] sm:text-xs text-[#8b949e]">챕터</p>
+                <p className="text-xs sm:text-sm font-bold text-[#f0b429] font-mono mt-0.5">+50~250</p>
               </div>
             </div>
 
             {/* 프로젝트 공유 */}
-            <div className="flex flex-col items-center gap-2 p-4 bg-[#0d1117] rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.3)] hover:shadow-[0_4px_12px_rgba(240,180,41,0.1)] transition-all">
-              <div className="w-10 h-10 flex items-center justify-center bg-[#a371f7]/10 border border-[#a371f7]/30 rounded-lg">
-                <Rocket className="h-5 w-5 text-[#a371f7]" />
+            <div className="flex flex-col items-center gap-1.5 sm:gap-2 p-3 sm:p-4 bg-[#0d1117] rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.3)] hover:shadow-[0_4px_12px_rgba(240,180,41,0.1)] transition-all">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center bg-[#a371f7]/10 border border-[#a371f7]/30 rounded-lg">
+                <Rocket className="h-4 w-4 sm:h-5 sm:w-5 text-[#a371f7]" />
               </div>
               <div className="text-center">
-                <p className="text-xs text-[#8b949e]">프로젝트 공유</p>
-                <p className="text-sm font-bold text-[#f0b429] font-mono mt-0.5">+30</p>
+                <p className="text-[10px] sm:text-xs text-[#8b949e]">프로젝트</p>
+                <p className="text-xs sm:text-sm font-bold text-[#f0b429] font-mono mt-0.5">+30</p>
               </div>
             </div>
 
             {/* 답변 채택 */}
-            <div className="flex flex-col items-center gap-2 p-4 bg-[#0d1117] rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.3)] hover:shadow-[0_4px_12px_rgba(240,180,41,0.1)] transition-all">
-              <div className="w-10 h-10 flex items-center justify-center bg-[#56d364]/10 border border-[#56d364]/30 rounded-lg">
-                <Award className="h-5 w-5 text-[#56d364]" />
+            <div className="flex flex-col items-center gap-1.5 sm:gap-2 p-3 sm:p-4 bg-[#0d1117] rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.3)] hover:shadow-[0_4px_12px_rgba(240,180,41,0.1)] transition-all">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center bg-[#56d364]/10 border border-[#56d364]/30 rounded-lg">
+                <Award className="h-4 w-4 sm:h-5 sm:w-5 text-[#56d364]" />
               </div>
               <div className="text-center">
-                <p className="text-xs text-[#8b949e]">답변 채택</p>
-                <p className="text-sm font-bold text-[#f0b429] font-mono mt-0.5">+10</p>
+                <p className="text-[10px] sm:text-xs text-[#8b949e]">채택</p>
+                <p className="text-xs sm:text-sm font-bold text-[#f0b429] font-mono mt-0.5">+10</p>
               </div>
             </div>
 
             {/* 글 작성 */}
-            <div className="flex flex-col items-center gap-2 p-4 bg-[#0d1117] rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.3)] hover:shadow-[0_4px_12px_rgba(240,180,41,0.1)] transition-all">
-              <div className="w-10 h-10 flex items-center justify-center bg-[#f0b429]/10 border border-[#f0b429]/30 rounded-lg">
-                <PenLine className="h-5 w-5 text-[#f0b429]" />
+            <div className="flex flex-col items-center gap-1.5 sm:gap-2 p-3 sm:p-4 bg-[#0d1117] rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.3)] hover:shadow-[0_4px_12px_rgba(240,180,41,0.1)] transition-all col-span-1 sm:col-span-1">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center bg-[#f0b429]/10 border border-[#f0b429]/30 rounded-lg">
+                <PenLine className="h-4 w-4 sm:h-5 sm:w-5 text-[#f0b429]" />
               </div>
               <div className="text-center">
-                <p className="text-xs text-[#8b949e]">글/댓글 작성</p>
-                <p className="text-sm font-bold text-[#f0b429] font-mono mt-0.5">+3</p>
+                <p className="text-[10px] sm:text-xs text-[#8b949e]">글/댓글</p>
+                <p className="text-xs sm:text-sm font-bold text-[#f0b429] font-mono mt-0.5">+3</p>
               </div>
             </div>
 
             {/* 좋아요 획득 */}
-            <div className="flex flex-col items-center gap-2 p-4 bg-[#0d1117] rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.3)] hover:shadow-[0_4px_12px_rgba(240,180,41,0.1)] transition-all">
-              <div className="w-10 h-10 flex items-center justify-center bg-[#f85149]/10 border border-[#f85149]/30 rounded-lg">
-                <Heart className="h-5 w-5 text-[#f85149]" />
+            <div className="flex flex-col items-center gap-1.5 sm:gap-2 p-3 sm:p-4 bg-[#0d1117] rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.3)] hover:shadow-[0_4px_12px_rgba(240,180,41,0.1)] transition-all col-span-1 sm:col-span-1">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center bg-[#f85149]/10 border border-[#f85149]/30 rounded-lg">
+                <Heart className="h-4 w-4 sm:h-5 sm:w-5 text-[#f85149]" />
               </div>
               <div className="text-center">
-                <p className="text-xs text-[#8b949e]">좋아요 획득</p>
-                <p className="text-sm font-bold text-[#f0b429] font-mono mt-0.5">+3</p>
+                <p className="text-[10px] sm:text-xs text-[#8b949e]">좋아요</p>
+                <p className="text-xs sm:text-sm font-bold text-[#f0b429] font-mono mt-0.5">+3</p>
               </div>
             </div>
           </div>

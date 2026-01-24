@@ -101,11 +101,11 @@ export const Icons = {
   // VibeDojo 로고 심볼 - 심플한 육각형 + 코드 브래킷
   vibedojoSymbol: ({ ...props }: React.SVGProps<SVGSVGElement>) => (
     <svg viewBox="0 0 32 32" fill="none" {...props}>
-      {/* 외곽 육각형 - amber/orange gradient */}
+      {/* 외곽 육각형 - 메인 포인트 컬러 gradient */}
       <defs>
         <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#D97706" />
-          <stop offset="100%" stopColor="#EA580C" />
+          <stop offset="0%" stopColor="#f0b429" />
+          <stop offset="100%" stopColor="#f7c948" />
         </linearGradient>
       </defs>
       <path

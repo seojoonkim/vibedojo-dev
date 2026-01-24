@@ -905,7 +905,7 @@ function QuestionCard({
       {(localReplies.length > 0 || currentUserId) && (
         <div className="border-t border-[#21262d] bg-[#0d1117]">
           {localReplies.length > 0 && (
-            <div className="px-4 py-3 space-y-3">
+            <div className="px-4 py-3">
               {displayedReplies.map((reply) => (
                 <div
                   key={reply.id}
@@ -1484,7 +1484,7 @@ export default function CommunityPage() {
           {/* Main Feed */}
           <main className="flex-1 min-w-0 space-y-4">
             {/* Mobile Filter */}
-            <div className="lg:hidden overflow-x-auto pb-2 -mx-4 px-4">
+            <div className="lg:hidden overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
               <div className="flex gap-2">
                 {categories.map((cat) => {
                   const Icon = cat.icon;

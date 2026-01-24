@@ -26,6 +26,13 @@ import { getPartById } from "@/lib/curriculum-data";
 import { ChapterQuestionsPanel, TextSelection, Question } from "@/components/chapter-questions-panel";
 import { TextSelectionTooltip } from "@/components/text-selection-tooltip";
 import { QuestionHighlightOverlay } from "@/components/question-highlight-overlay";
+import { ChapterCompletionForm } from "@/components/chapter-completion-form";
+import { CompletionCelebrationModal } from "@/components/completion-celebration-modal";
+import { ChecklistProvider, useChecklistContext } from "@/components/interactive-checklist";
+import { Check } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { MobileLearningNotice } from "@/components/mobile-learning-notice";
 
 interface Chapter {
   id: string;
@@ -45,9 +52,109 @@ interface ChapterProgress {
   completed_at: string | null;
 }
 
+interface SavedReviewData {
+  difficultyRating: number;
+  satisfactionRating: number;
+  review: string | null;
+}
+
+// Interactive checkbox component for markdown checklists
+function InteractiveCheckbox({ itemId }: { itemId: string }) {
+  const { isChecked, toggleItem, registerCheckbox } = useChecklistContext();
+  const isItemChecked = isChecked(itemId);
+
+  // Register this checkbox on mount
+  useEffect(() => {
+    registerCheckbox(itemId);
+  }, [itemId, registerCheckbox]);
+
+  return (
+    <button
+      type="button"
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        toggleItem(itemId);
+      }}
+      className={cn(
+        "inline-flex items-center justify-center w-[18px] h-[18px] rounded border-2 mr-2.5 mt-[5px] shrink-0 cursor-pointer transition-all duration-200",
+        isItemChecked
+          ? "bg-[#56d364] border-[#56d364]"
+          : "border-[#484f58] hover:border-[#8b949e] bg-transparent"
+      )}
+      aria-checked={isItemChecked}
+      role="checkbox"
+    >
+      <Check
+        className={cn(
+          "h-3 w-3 text-[#0d1117] transition-all duration-200",
+          isItemChecked ? "opacity-100 scale-100" : "opacity-0 scale-75"
+        )}
+        strokeWidth={3}
+      />
+    </button>
+  );
+}
+
+// Wrapper for list items containing checkboxes
+function ChecklistItem({ children, itemId }: { children: React.ReactNode; itemId: string }) {
+  const { isChecked } = useChecklistContext();
+  const isItemChecked = isChecked(itemId);
+
+  return (
+    <li
+      className={cn(
+        "flex items-start transition-all duration-200 cursor-pointer select-none group",
+        isItemChecked && "[&>span]:text-[#8b949e] [&>span]:line-through"
+      )}
+    >
+      {children}
+    </li>
+  );
+}
+
+// Wrapper component that connects checklist state to completion form
+function ChecklistAwareCompletionForm({
+  chapter,
+  chapterTitle,
+  completing,
+  isCompleted,
+  savedReviewData,
+  onComplete,
+}: {
+  chapter: Chapter;
+  chapterTitle: string;
+  completing: boolean;
+  isCompleted: boolean;
+  savedReviewData: SavedReviewData | null;
+  onComplete: (data: {
+    difficultyRating: number;
+    satisfactionRating: number;
+    review: string;
+  }) => Promise<void>;
+}) {
+  const { getTotalCheckboxes, getCheckedCount, areAllChecked } = useChecklistContext();
+
+  return (
+    <ChapterCompletionForm
+      chapterId={chapter.id}
+      chapterTitle={chapterTitle}
+      xpReward={chapter.xp_reward}
+      onComplete={onComplete}
+      isSubmitting={completing}
+      isAlreadyCompleted={isCompleted}
+      savedReviewData={savedReviewData}
+      totalCheckboxes={getTotalCheckboxes()}
+      checkedCount={getCheckedCount()}
+      areAllChecked={areAllChecked()}
+    />
+  );
+}
+
 export default function ChapterDetailPage() {
   const params = useParams();
   const router = useRouter();
+  const isMobile = useIsMobile();
   const [chapter, setChapter] = useState<Chapter | null>(null);
   const [progress, setProgress] = useState<ChapterProgress | null>(null);
   const [prevChapter, setPrevChapter] = useState<Chapter | null>(null);
@@ -63,6 +170,18 @@ export default function ChapterDetailPage() {
   const [highlightedQuestionId, setHighlightedQuestionId] = useState<string | null>(null);
   const [showSubheader, setShowSubheader] = useState(false);
   const titleRef = useRef<HTMLDivElement>(null);
+  const checkboxCounterRef = useRef(0);
+
+  // Completion celebration state
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [completionData, setCompletionData] = useState<{
+    difficultyRating: number;
+    satisfactionRating: number;
+    hasReview: boolean;
+  } | null>(null);
+
+  // Saved review data for completed chapters
+  const [savedReviewData, setSavedReviewData] = useState<SavedReviewData | null>(null);
 
   const chapterId = params.id as string;
 
@@ -98,6 +217,40 @@ export default function ChapterDetailPage() {
 
         if (progressData) {
           setProgress(progressData);
+
+          // If completed, fetch saved review data
+          if (progressData.status === "completed") {
+            // First try to get from chapter_reviews table
+            const { data: reviewData } = await supabase
+              .from("chapter_reviews")
+              .select("difficulty_rating, satisfaction_rating, post_id")
+              .eq("user_id", user.id)
+              .eq("chapter_id", chapterData.id)
+              .single();
+
+            if (reviewData) {
+              let reviewText: string | null = null;
+
+              // If there's a linked post, get the review content
+              if (reviewData.post_id) {
+                const { data: postData } = await supabase
+                  .from("posts")
+                  .select("content")
+                  .eq("id", reviewData.post_id)
+                  .single();
+
+                if (postData) {
+                  reviewText = postData.content;
+                }
+              }
+
+              setSavedReviewData({
+                difficultyRating: reviewData.difficulty_rating,
+                satisfactionRating: reviewData.satisfaction_rating,
+                review: reviewText,
+              });
+            }
+          }
         }
       }
 
@@ -145,6 +298,11 @@ export default function ChapterDetailPage() {
             text = text.replace(/English\s*\|\s*한국어\n*/g, '');
             // 언어 선택 라인 뒤의 구분선도 제거
             text = text.replace(/^---\n*/m, '');
+
+            // "다음 단계" 섹션 제거 (다음 챕터 링크가 포함된 섹션)
+            // ## 🚀 다음 단계, ## 다음 단계, ## ➡️ 다음 단계 등의 형식 지원
+            text = text.replace(/##\s*(?:🚀|➡️|▶️)?\s*다음\s*단계[\s\S]*?(?=##|$)/gi, '');
+
             setMarkdownContent(text);
           }
         } catch (err) {
@@ -174,7 +332,11 @@ export default function ChapterDetailPage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleComplete = async () => {
+  const handleComplete = async (data: {
+    difficultyRating: number;
+    satisfactionRating: number;
+    review: string;
+  }) => {
     if (!chapter || completing) return;
 
     setCompleting(true);
@@ -189,6 +351,7 @@ export default function ChapterDetailPage() {
       return;
     }
 
+    // 1. Update progress
     const { error: progressError } = await supabase.from("progress").upsert(
       {
         user_id: user.id,
@@ -205,12 +368,12 @@ export default function ChapterDetailPage() {
       return;
     }
 
+    // 2. Add XP
     await supabase.from("xp_logs").insert({
       user_id: user.id,
       amount: chapter.xp_reward,
-      reason: `Completed chapter ${chapter.id}: ${chapter.title_ko}`,
-      source_type: "chapter",
-      source_id: chapter.id,
+      action: "chapter_complete",
+      reference_id: chapter.id,
     });
 
     await supabase.rpc("increment_xp", {
@@ -218,12 +381,50 @@ export default function ChapterDetailPage() {
       amount: chapter.xp_reward,
     });
 
-    setProgress({ status: "completed", completed_at: new Date().toISOString() });
-    setCompleting(false);
+    // 3. If there's a review, post to community
+    let postId: string | null = null;
+    if (data.review.trim()) {
+      const { data: postData, error: postError } = await supabase
+        .from("posts")
+        .insert({
+          author_id: user.id,
+          type: "review",
+          title: `학습 완료 - ${markdownTitle || chapter.title_ko}`,
+          content: data.review.trim(),
+          chapter_id: chapter.id,
+          difficulty_rating: data.difficultyRating,
+          satisfaction_rating: data.satisfactionRating,
+        })
+        .select("id")
+        .single();
 
-    if (nextChapter) {
-      router.push(`/curriculum/${nextChapter.id}`);
+      if (postError) {
+        console.error("Failed to create review post:", postError.message, postError.code, postError.details, postError.hint);
+      } else if (postData) {
+        postId = postData.id;
+      }
     }
+
+    // 4. Save chapter review (ratings)
+    await supabase.from("chapter_reviews").upsert(
+      {
+        user_id: user.id,
+        chapter_id: chapter.id,
+        difficulty_rating: data.difficultyRating,
+        satisfaction_rating: data.satisfactionRating,
+        post_id: postId,
+      },
+      { onConflict: "user_id,chapter_id" }
+    );
+
+    setProgress({ status: "completed", completed_at: new Date().toISOString() });
+    setCompletionData({
+      difficultyRating: data.difficultyRating,
+      satisfactionRating: data.satisfactionRating,
+      hasReview: !!data.review.trim(),
+    });
+    setCompleting(false);
+    setShowCelebration(true);
   };
 
   const handleAskQuestion = useCallback((selection: TextSelection) => {
@@ -364,27 +565,32 @@ export default function ChapterDetailPage() {
     }, 5000);
   }, []);
 
+  // Show mobile notice on small screens
+  if (isMobile) {
+    return <MobileLearningNotice chapterTitle={chapter?.title_ko || markdownTitle || undefined} />;
+  }
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#fafafa] flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-violet-600" />
+      <div className="min-h-screen bg-[#0d1117] flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-[#f0b429]" />
       </div>
     );
   }
 
   if (!chapter) {
     return (
-      <div className="min-h-screen bg-[#fafafa] flex items-center justify-center">
-        <Card className="max-w-sm mx-auto bg-white border-gray-200 shadow-sm">
+      <div className="min-h-screen bg-[#0d1117] flex items-center justify-center">
+        <Card className="max-w-sm mx-auto bg-[#1c2128] border-0 shadow-[0_4px_12px_rgba(0,0,0,0.35)]">
           <CardContent className="py-10 text-center">
-            <div className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
-              <BookOpen className="h-7 w-7 text-gray-400" />
+            <div className="w-14 h-14 rounded-full bg-[#21262d] flex items-center justify-center mx-auto mb-4">
+              <BookOpen className="h-7 w-7 text-[#8b949e]" />
             </div>
-            <h2 className="text-lg font-bold mb-2 text-gray-900">챕터를 찾을 수 없습니다</h2>
-            <p className="text-gray-500 text-sm mb-5">
+            <h2 className="text-lg font-bold mb-2 text-[#c9d1d9]">챕터를 찾을 수 없습니다</h2>
+            <p className="text-[#8b949e] text-sm mb-5">
               요청하신 챕터가 존재하지 않습니다.
             </p>
-            <Button asChild className="rounded-full h-10 px-5 text-sm bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500">
+            <Button asChild className="rounded-md h-10 px-5 text-sm bg-[#f0b429] hover:bg-[#f7c948] text-[#0d1117] border-0">
               <Link href="/curriculum">수련 과정으로 돌아가기</Link>
             </Button>
           </CardContent>
@@ -397,7 +603,7 @@ export default function ChapterDetailPage() {
   const partInfo = getPartById(chapter.part);
 
   return (
-    <div className="min-h-screen bg-[#22272e]">
+    <div className="min-h-screen bg-[#0d1117]">
       {/* Text Selection Tooltip */}
       <TextSelectionTooltip
         containerSelector=".curriculum-content"
@@ -416,7 +622,7 @@ export default function ChapterDetailPage() {
 
       {/* Sticky Header - Single line (스크롤 시에만 나타남) */}
       <div
-        className={`bg-[#161b22]/95 border-b border-[#3d444d] sticky top-14 z-40 backdrop-blur-lg transition-all duration-300 ease-out ${
+        className={`bg-[#161b22]/95 shadow-[0_2px_8px_rgba(0,0,0,0.3)] sticky top-14 z-40 backdrop-blur-lg transition-all duration-300 ease-out ${
           showSubheader
             ? "opacity-100 translate-y-0"
             : "opacity-0 -translate-y-full pointer-events-none"
@@ -427,185 +633,178 @@ export default function ChapterDetailPage() {
             <div className="flex items-center gap-3 min-w-0">
               <Link
                 href="/curriculum"
-                className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-[#21262d] transition-colors shrink-0"
+                className="flex items-center justify-center w-8 h-8 rounded-md hover:bg-[#21262d] transition-colors shrink-0"
               >
-                <ArrowLeft className="h-4 w-4 text-[#9198a1]" />
+                <ArrowLeft className="h-4 w-4 text-[#8b949e]" />
               </Link>
               <div className="flex items-center gap-2 min-w-0 overflow-hidden">
-                <h1 className="text-sm font-medium text-[#e6edf3] truncate">
+                <h1 className="text-sm font-medium text-[#c9d1d9] truncate">
                   {markdownTitle || chapter.title_ko}
                 </h1>
                 {isCompleted && (
-                  <CheckCircle className="h-4 w-4 text-violet-400 shrink-0" />
+                  <CheckCircle className="h-4 w-4 text-[#56d364] shrink-0" />
                 )}
               </div>
             </div>
 
             {isCompleted ? (
               <div className="flex items-center gap-2 text-sm shrink-0">
-                <span className="font-medium text-gray-400">+{chapter.xp_reward} XP</span>
+                <span className="font-medium text-[#8b949e]">+{chapter.xp_reward} XP</span>
                 <div className="flex items-center gap-1">
-                  <div className="w-4 h-4 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-500 flex items-center justify-center">
+                  <div className="w-4 h-4 rounded-full bg-[#56d364] flex items-center justify-center">
                     <CheckCircle className="h-2.5 w-2.5 text-white" />
                   </div>
-                  <span className="text-xs font-medium text-emerald-500">Completed</span>
+                  <span className="text-xs font-medium text-[#56d364]">Completed</span>
                 </div>
               </div>
             ) : (
               <div className="flex items-center gap-1.5 text-sm shrink-0">
-                <Award className="h-4 w-4 text-violet-400" />
-                <span className="font-semibold text-violet-400">{chapter.xp_reward} XP</span>
+                <Award className="h-4 w-4 text-[#f0b429]" />
+                <span className="font-semibold text-[#f0b429]">{chapter.xp_reward} XP</span>
               </div>
             )}
           </div>
         </div>
       </div>
 
-      <div className="container pt-1 pb-2 px-3 sm:px-4 lg:px-6">
+      <div className="container py-4 px-3 sm:px-4 lg:px-6">
         {/* Chapter Info - Non-sticky */}
-        <div ref={titleRef} className="mb-2 max-w-7xl mx-auto">
-          {/* Back button and Part info */}
-          <div className="mb-2">
+        <div ref={titleRef} className="mb-4 max-w-7xl mx-auto">
+          {/* Back button */}
+          <div className="mb-6">
             <Link
               href="/curriculum"
-              className="inline-flex items-center gap-1.5 text-sm text-violet-400 hover:text-violet-300 transition-colors mb-4"
+              className="inline-flex items-center gap-1.5 text-sm text-[#79c0ff] hover:text-[#79b8ff] transition-colors"
             >
               <ArrowLeft className="h-4 w-4" />
               <span>수련 과정으로 돌아가기</span>
             </Link>
-            <div className="text-lg font-medium text-[#e6edf3] pl-[22px] mb-1">
-              {partInfo ? `${partInfo.title.ko} - ${partInfo.subtitle.ko}` : `${chapter.part}단계 수련`}
-            </div>
           </div>
 
+          {/* Part Info */}
+          {partInfo && (
+            <div className="mb-2">
+              <span className="text-base sm:text-lg text-[#8b949e]">
+                Part {chapter.part}. {partInfo.subtitle.ko} - {partInfo.description.ko}
+              </span>
+            </div>
+          )}
+
           {/* Title */}
-          <div className="flex items-center justify-between gap-4 pl-[22px] pb-3">
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#e6edf3]">{markdownTitle || chapter.title_ko}</h2>
-            {isCompleted && (
-              <div className="flex items-center gap-3 shrink-0">
-                <span className="text-lg font-normal text-gray-400">+{chapter.xp_reward} XP</span>
-                <div className="flex items-center gap-1.5">
-                  <div className="w-5 h-5 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-500 flex items-center justify-center">
-                    <CheckCircle className="h-3 w-3 text-white" />
-                  </div>
-                  <span className="text-sm font-medium text-emerald-500">Completed</span>
-                </div>
+          <div className="flex items-center justify-between gap-4 py-3">
+            <h2 className="text-3xl sm:text-4xl font-bold text-[#c9d1d9]">{markdownTitle || chapter.title_ko}</h2>
+            {isCompleted ? (
+              <div className="flex items-center gap-2 shrink-0 px-3 py-1.5 bg-[#56d364]/15 rounded-md shadow-[0_2px_6px_rgba(86,211,100,0.2)]">
+                <CheckCircle className="h-4 w-4 text-[#56d364]" />
+                <span className="text-sm font-medium text-[#56d364]">완료</span>
+                <span className="text-sm text-[#56d364]/70">+{chapter.xp_reward} XP</span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-1.5 shrink-0 px-3 py-1.5 bg-[#f0b429]/15 rounded-md shadow-[0_2px_6px_rgba(240,180,41,0.2)]">
+                <span className="text-sm font-medium text-[#f0b429]">{chapter.xp_reward} XP</span>
               </div>
             )}
           </div>
-          {!markdownTitle && <p className="text-sm text-[#9198a1] mt-1">{chapter.title_en}</p>}
         </div>
 
         <div className="flex gap-4 max-w-7xl mx-auto">
           {/* Main Content Area */}
           <div className="flex-1 min-w-0 transition-all duration-300">
-            {/* Content */}
-            <Card className="mb-5 bg-[#0d1117] border-0 rounded-xl sm:rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.3)] overflow-hidden py-0 gap-0">
-              <CardContent className="p-4 sm:p-5 md:p-6 curriculum-content">
-                {contentLoading ? (
-                  <div className="flex flex-col items-center justify-center py-16">
-                    <Loader2 className="h-8 w-8 animate-spin text-violet-400 mb-3" />
-                    <span className="text-sm text-[#9198a1]">콘텐츠 로딩 중...</span>
-                  </div>
-                ) : markdownContent ? (
-                  <div className="prose max-w-none [&>*:first-child]:mt-0">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
-                      {markdownContent}
-                    </ReactMarkdown>
-                  </div>
-                ) : (
-                  <div className="text-center py-16">
-                    <div className="w-14 h-14 rounded-full bg-[#21262d] flex items-center justify-center mx-auto mb-4">
-                      <BookOpen className="h-7 w-7 text-[#9198a1]" />
+            <ChecklistProvider chapterId={chapterId}>
+              {/* Content */}
+              <Card className="mb-5 bg-[#1c2128] border-0 rounded-lg shadow-[0_4px_12px_rgba(0,0,0,0.35)] overflow-hidden py-0 gap-0">
+                <CardContent className="p-4 sm:p-5 md:p-6 curriculum-content">
+                  {contentLoading ? (
+                    <div className="flex flex-col items-center justify-center py-16">
+                      <Loader2 className="h-8 w-8 animate-spin text-[#79c0ff] mb-3" />
+                      <span className="text-sm text-[#8b949e]">콘텐츠 로딩 중...</span>
                     </div>
-                    <p className="text-[#e6edf3] text-sm mb-2">{chapter.description_ko}</p>
-                    <p className="text-xs text-[#9198a1]">
-                      학습 자료가 준비 중입니다.
-                    </p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+                  ) : markdownContent ? (
+                    (() => {
+                      // Reset checkbox counter before rendering
+                      checkboxCounterRef.current = 0;
+                      return (
+                        <div className="prose prose-invert max-w-none [&>*:first-child]:mt-0 prose-headings:text-[#c9d1d9] prose-p:text-[#c9d1d9] prose-strong:text-[#c9d1d9] prose-a:text-[#79c0ff] prose-code:text-[#f0883e] prose-code:bg-[#21262d] prose-pre:bg-[#0d1117] prose-pre:border prose-pre:border-[#30363d] prose-blockquote:border-l-[#30363d] prose-blockquote:text-[#8b949e] prose-li:text-[#c9d1d9]">
+                          <ReactMarkdown
+                            remarkPlugins={[remarkGfm]}
+                            rehypePlugins={[rehypeRaw]}
+                            components={{
+                              // Custom checkbox input for task lists
+                              input: ({ type, checked, ...props }) => {
+                                if (type === "checkbox") {
+                                  // Generate a unique sequential ID
+                                  const itemId = `item-${checkboxCounterRef.current++}`;
+                                  return <InteractiveCheckbox itemId={itemId} />;
+                                }
+                                return <input type={type} {...props} />;
+                              },
+                              // Style list items containing checkboxes
+                              li: ({ children, className, ...props }) => {
+                                // Check if this is a task list item (contains checkbox)
+                                const hasCheckbox = className?.includes("task-list-item");
+                                if (hasCheckbox) {
+                                  // Note: The itemId is already assigned in the input component
+                                  // We just need to apply the styling based on checked state
+                                  return (
+                                    <li className={cn(className, "flex items-start transition-all duration-200 cursor-pointer select-none group")} {...props}>
+                                      {children}
+                                    </li>
+                                  );
+                                }
+                                return <li className={className} {...props}>{children}</li>;
+                              },
+                            }}
+                          >
+                            {markdownContent}
+                          </ReactMarkdown>
+                        </div>
+                      );
+                    })()
+                  ) : (
+                    <div className="text-center py-16">
+                      <div className="w-14 h-14 rounded-full bg-[#21262d] flex items-center justify-center mx-auto mb-4">
+                        <BookOpen className="h-7 w-7 text-[#8b949e]" />
+                      </div>
+                      <p className="text-[#c9d1d9] text-sm mb-2">{chapter.description_ko}</p>
+                      <p className="text-xs text-[#8b949e]">
+                        학습 자료가 준비 중입니다.
+                      </p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
 
-            {/* Complete Button */}
-            {!isCompleted && (
-              <div className="mb-5 rounded-2xl bg-gradient-to-r from-violet-900/30 to-transparent border border-violet-500/30 p-4">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                  <div>
-                    <h3 className="font-semibold text-sm text-[#e6edf3] mb-1">🥋 수련을 완료하셨나요?</h3>
-                    <p className="text-xs text-[#9198a1]">
-                      완료 버튼을 눌러 <span className="text-violet-400 font-semibold">{chapter.xp_reward} XP</span>를 획득하세요!
-                    </p>
-                  </div>
-                  <Button
-                    onClick={handleComplete}
-                    disabled={completing}
-                    size="default"
-                    className="rounded-full h-10 px-5 text-sm w-full sm:w-auto bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 shadow-lg shadow-violet-500/30"
-                  >
-                    {completing ? (
-                      <>
-                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                        처리 중...
-                      </>
-                    ) : (
-                      <>
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        완료하기
-                      </>
-                    )}
-                  </Button>
-                </div>
+              {/* Chapter Completion Form - 항상 표시 */}
+              <div className="mb-5">
+                <ChecklistAwareCompletionForm
+                  chapter={chapter}
+                  chapterTitle={markdownTitle || chapter.title_ko}
+                  completing={completing}
+                  isCompleted={isCompleted}
+                  savedReviewData={savedReviewData}
+                  onComplete={handleComplete}
+                />
               </div>
-            )}
-
-            {/* Navigation */}
-            <div className="flex items-center justify-between gap-4">
-              {prevChapter ? (
-                <Link href={`/curriculum/${prevChapter.id}`} className="flex-1">
-                  <Button variant="outline" className="w-full rounded-xl h-auto py-3 px-4 justify-start bg-[#21262d] border-[#3d444d] hover:bg-[#30363d] hover:border-[#484f58]">
-                    <ArrowLeft className="h-4 w-4 mr-3 shrink-0 text-[#9198a1]" />
-                    <div className="text-left min-w-0">
-                      <div className="text-xs text-[#9198a1] mb-0.5">이전</div>
-                      <div className="text-sm font-medium text-[#e6edf3] truncate">{prevChapter.title_ko}</div>
-                    </div>
-                  </Button>
-                </Link>
-              ) : (
-                <div className="flex-1" />
-              )}
-
-              <Link href="/curriculum" className="flex-1">
-                <Button className="w-full rounded-xl h-auto py-3 px-4 justify-between bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500">
-                  <div className="flex-1 text-center min-w-0">
-                    <div className="text-sm font-medium text-white">학습 마치기</div>
-                  </div>
-                  <div className="flex items-center gap-1 shrink-0 ml-4">
-                    <div className="text-xs text-white/70">완료</div>
-                    <ArrowRight className="h-4 w-4" />
-                  </div>
-                </Button>
-              </Link>
-            </div>
+            </ChecklistProvider>
 
             {/* Mobile Questions Panel Toggle */}
-            <div className="lg:hidden mt-6">
+            <div className="lg:hidden mt-4">
               <Button
                 variant="outline"
-                className="w-full rounded-xl h-12 bg-[#21262d] border-[#3d444d] hover:bg-[#30363d] hover:border-[#484f58] text-[#e6edf3]"
+                className="w-full rounded-lg h-11 bg-[#1c2128] border-0 shadow-[0_4px_12px_rgba(0,0,0,0.35)] hover:bg-[#21262d] hover:shadow-[0_6px_16px_rgba(0,0,0,0.45)] text-[#c9d1d9]"
                 onClick={() => setShowQuestionsPanel(!showQuestionsPanel)}
               >
-                <MessageSquare className="h-4 w-4 mr-2 text-violet-400" />
+                <MessageSquare className="h-4 w-4 mr-2 text-[#8b949e]" />
                 질문 & 토론
                 {questions.length > 0 && (
-                  <span className="ml-2 px-2 py-0.5 bg-violet-500/20 text-violet-400 text-xs rounded-full">
+                  <span className="ml-2 px-1.5 py-0.5 bg-[#30363d] text-[#8b949e] text-xs rounded">
                     {questions.length}
                   </span>
                 )}
                 {showQuestionsPanel ? (
-                  <ChevronRight className="h-4 w-4 ml-auto" />
+                  <ChevronRight className="h-4 w-4 ml-auto text-[#8b949e]" />
                 ) : (
-                  <ChevronLeft className="h-4 w-4 ml-auto" />
+                  <ChevronLeft className="h-4 w-4 ml-auto text-[#8b949e]" />
                 )}
               </Button>
             </div>
@@ -614,22 +813,20 @@ export default function ChapterDetailPage() {
           {/* Questions Panel - Collapsible */}
           <div className="hidden lg:block w-[300px] shrink-0">
             <div className="sticky top-32 max-h-[calc(100vh-9rem)] flex flex-col">
-              <div className={`bg-[#0d1117] shadow-[0_2px_20px_rgba(0,0,0,0.3)] overflow-hidden flex flex-col transition-all duration-300 ${
-                showQuestionsPanel ? "rounded-xl" : "rounded-xl"
-              }`}>
+              <div className={`bg-[#1c2128] border-0 shadow-[0_4px_12px_rgba(0,0,0,0.35)] overflow-hidden flex flex-col transition-all duration-300 rounded-lg`}>
                 {/* Toggle Bar - Top */}
                 <button
                   onClick={() => setShowQuestionsPanel(!showQuestionsPanel)}
-                  className="flex items-center justify-between px-4 py-3 bg-[#0d1117] hover:bg-[#161b22] transition-colors cursor-pointer group"
+                  className="flex items-center justify-between px-4 py-3 bg-[#161b22] hover:bg-[#21262d] transition-colors cursor-pointer group"
                 >
                   <div className="flex items-center gap-2">
-                    <MessageSquare className="h-4 w-4 text-violet-400" />
-                    <span className="text-sm font-medium text-[#e6edf3]">
+                    <MessageSquare className="h-4 w-4 text-[#79c0ff]" />
+                    <span className="text-sm font-medium text-[#c9d1d9]">
                       질문 & 토론
                     </span>
-                    <span className="text-xs text-[#6e7681]">({questions.length})</span>
+                    <span className="text-xs text-[#8b949e]">({questions.length})</span>
                   </div>
-                  <ChevronRight className={`h-4 w-4 text-[#6e7681] group-hover:text-[#9198a1] transition-transform duration-300 ${
+                  <ChevronRight className={`h-4 w-4 text-[#8b949e] group-hover:text-[#c9d1d9] transition-transform duration-300 ${
                     showQuestionsPanel ? "rotate-90" : "-rotate-90"
                   }`} />
                 </button>
@@ -640,7 +837,7 @@ export default function ChapterDetailPage() {
                     showQuestionsPanel ? "flex-1 opacity-100" : "h-0 opacity-0"
                   }`}
                 >
-                  <div className="border-t border-[#3d444d]" />
+                  <div className="h-px bg-[#30363d]/50" />
                   <div className="p-4 overflow-y-auto max-h-[calc(100vh-12rem)]">
                     <ChapterQuestionsPanel
                       chapterId={chapterId}
@@ -662,7 +859,7 @@ export default function ChapterDetailPage() {
         {/* Mobile Questions Panel (Expandable) */}
         {showQuestionsPanel && (
           <div className="lg:hidden mt-4 max-w-7xl mx-auto">
-            <Card className="bg-[#0d1117] border-0 rounded-xl shadow-[0_2px_20px_rgba(0,0,0,0.3)] overflow-hidden py-0">
+            <Card className="bg-[#1c2128] border-0 rounded-lg shadow-[0_4px_12px_rgba(0,0,0,0.35)] overflow-hidden py-0">
               <CardContent className="p-4">
                 <ChapterQuestionsPanel
                   chapterId={chapterId}
@@ -678,6 +875,19 @@ export default function ChapterDetailPage() {
           </div>
         )}
       </div>
+
+      {/* Completion Celebration Modal */}
+      {completionData && (
+        <CompletionCelebrationModal
+          open={showCelebration}
+          onOpenChange={setShowCelebration}
+          chapterTitle={markdownTitle || chapter.title_ko}
+          xpEarned={chapter.xp_reward}
+          difficultyRating={completionData.difficultyRating}
+          satisfactionRating={completionData.satisfactionRating}
+          hasReview={completionData.hasReview}
+        />
+      )}
     </div>
   );
 }

@@ -14,13 +14,34 @@ export default async function DashboardPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Mock data - will be replaced with real data
+  // Fetch real user profile data from database
+  let profile = null;
+  if (user) {
+    const { data } = await supabase
+      .from("profiles")
+      .select("username, display_name, avatar_url, total_xp, current_streak, character_id")
+      .eq("id", user.id)
+      .single();
+    profile = data;
+  }
+
+  // Fetch completed chapters count
+  let completedChaptersCount = 0;
+  if (user) {
+    const { count } = await supabase
+      .from("progress")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", user.id)
+      .eq("status", "completed");
+    completedChaptersCount = count || 0;
+  }
+
   const userStats = {
-    displayName: user?.email?.split("@")[0] || "수련생",
-    characterId: "panda",
-    totalXp: 350,
-    currentStreak: 3,
-    completedChapters: 3,
+    displayName: profile?.display_name || profile?.username || user?.email?.split("@")[0] || "수련생",
+    characterId: profile?.character_id ?? "panda",
+    totalXp: profile?.total_xp ?? 0,
+    currentStreak: profile?.current_streak ?? 0,
+    completedChapters: completedChaptersCount,
   };
 
   const totalChapters = getAllChapters().length;
@@ -31,59 +52,67 @@ export default async function DashboardPage() {
   const nextChapterId = String(userStats.completedChapters + 1).padStart(2, "0");
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-stone-100 to-stone-200 relative overflow-hidden">
-      {/* Warm ambient glow - softer ochre tones */}
-      <div className="fixed top-20 left-1/4 w-[500px] h-[500px] bg-yellow-800/5 rounded-full blur-[150px] pointer-events-none" />
-      <div className="fixed bottom-20 right-1/4 w-[400px] h-[400px] bg-stone-600/5 rounded-full blur-[120px] pointer-events-none" />
+    <div className="min-h-screen bg-[#0d1117] relative overflow-hidden">
+      {/* Subtle ambient glow */}
+      <div className="fixed top-20 left-1/4 w-[500px] h-[500px] bg-[#58a6ff]/5 rounded-full blur-[150px] pointer-events-none" />
+      <div className="fixed bottom-20 right-1/4 w-[400px] h-[400px] bg-[#daa520]/5 rounded-full blur-[120px] pointer-events-none" />
 
-      {/* Wood floor texture overlay - subtle horizontal lines */}
-      <div className="fixed inset-0 opacity-[0.015] pointer-events-none" style={{
-        backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(139,90,43,0.2) 60px, rgba(139,90,43,0.2) 61px)`
-      }} />
-
-      {/* Decorative Kanji - softer brown tones */}
-      <div className="fixed top-1/3 left-4 text-[10rem] font-serif text-stone-400/[0.08] select-none pointer-events-none hidden lg:block">
+      {/* Decorative Kanji */}
+      <div className="fixed top-1/3 left-4 text-[10rem] font-serif text-[#daa520]/[0.03] select-none pointer-events-none hidden lg:block">
         道
       </div>
-      <div className="fixed top-1/3 right-4 text-[10rem] font-serif text-stone-400/[0.08] select-none pointer-events-none hidden lg:block">
+      <div className="fixed top-1/3 right-4 text-[10rem] font-serif text-[#daa520]/[0.03] select-none pointer-events-none hidden lg:block">
         場
       </div>
 
-      {/* Hero - Character & XP in 1:2 horizontal layout */}
-      <div className="relative border-b border-stone-300/60">
-        <div className="absolute inset-0 bg-gradient-to-b from-yellow-900/5 to-transparent" />
+      {/* Header */}
+      <div className="container pt-5">
+        <div className="flex items-center gap-3 mb-3 pb-3 shadow-[0_1px_0_rgba(255,255,255,0.03)]">
+          <div className="p-2.5 bg-[#daa520]/10 rounded-lg shadow-[0_2px_6px_rgba(0,0,0,0.25)]">
+            <Icons.code className="h-5 w-5 text-[#daa520]" />
+          </div>
+          <div>
+            <h1 className="text-xl font-semibold text-[#c9d1d9]">
+              내 도장
+            </h1>
+            <p className="text-sm text-[#8b949e] font-mono">나의 수련 현황</p>
+          </div>
+        </div>
+      </div>
 
-        <div className="container relative py-8 sm:py-10">
+      {/* Hero - Character & XP in 1:2 horizontal layout */}
+      <div className="relative shadow-[0_1px_0_rgba(255,255,255,0.03)]">
+
+        <div className="container relative py-3">
           {/* Welcome Message */}
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center gap-4">
-              <div className="w-1.5 h-12 bg-gradient-to-b from-yellow-700 to-yellow-900 rounded-full" />
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 mb-5">
+            <div className="flex items-center gap-3">
+              <div className="w-1.5 h-9 sm:h-11 bg-gradient-to-b from-[#daa520] to-[#58a6ff] rounded-full" />
               <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-stone-800">
-                  <span className="text-yellow-800">{userStats.displayName}</span> 수련생님, 환영합니다!
-                </h1>
-                <p className="text-xs sm:text-sm text-stone-500 mt-1">오늘도 무공을 갈고닦으러 오셨군요</p>
+                <h2 className="text-lg sm:text-2xl font-bold text-[#c9d1d9]">
+                  <span className="text-[#daa520]">{userStats.displayName}</span> 수련생님, 환영합니다!
+                </h2>
+                <p className="text-xs sm:text-sm text-[#8b949e] mt-0.5">오늘도 무공을 갈고닦으러 오셨군요</p>
               </div>
             </div>
-            {/* Quick Stats */}
-            <div className="hidden sm:flex items-center gap-4">
-              <div className="flex items-center gap-2 px-4 py-3 bg-white/80 border border-stone-300 rounded-sm shadow-sm">
-                <Icons.flame className="h-4 w-4 text-orange-600" />
-                <span className="text-sm font-bold text-stone-700">{userStats.currentStreak}일</span>
-                <span className="text-xs text-stone-500">연속</span>
+            {/* Quick Stats - Mobile visible */}
+            <div className="flex items-center gap-2 sm:gap-3 ml-4 sm:ml-0">
+              <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-2 sm:py-2.5 bg-[#1c2128] rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.3)]">
+                <Icons.flame className="h-3.5 sm:h-4 w-3.5 sm:w-4 text-[#e3b341]" />
+                <span className="text-xs sm:text-sm font-bold text-[#c9d1d9] font-mono">{userStats.currentStreak}일</span>
               </div>
-              <div className="flex items-center gap-2 px-4 py-3 bg-white/80 border border-stone-300 rounded-sm shadow-sm">
-                <Icons.zap className="h-4 w-4 text-yellow-600" />
-                <span className="text-sm font-bold text-stone-700">{userStats.totalXp}</span>
-                <span className="text-xs text-stone-500">XP</span>
+              <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-2 sm:py-2.5 bg-[#1c2128] rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.3)]">
+                <Icons.zap className="h-3.5 sm:h-4 w-3.5 sm:w-4 text-[#daa520]" />
+                <span className="text-xs sm:text-sm font-bold text-[#c9d1d9] font-mono">{userStats.totalXp}</span>
+                <span className="text-[10px] sm:text-xs text-[#8b949e]">XP</span>
               </div>
             </div>
           </div>
 
           {/* 1:2 Layout - Character : XP Progress */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {/* Character Card - 1 portion */}
-            <div className="relative bg-white/90 backdrop-blur-sm border border-stone-300 p-5 sm:p-6 rounded-sm shadow-sm hover:border-yellow-700/50 hover:shadow-lg transition-all duration-300">
+            <div className="relative bg-[#1c2128] backdrop-blur-sm p-5 rounded-lg shadow-[0_4px_12px_rgba(0,0,0,0.35)] hover:shadow-[0_8px_24px_rgba(218,165,32,0.15)] transition-all duration-300 group">
               <CharacterDisplay
                 initialCharacterId={userStats.characterId}
                 displayName={userStats.displayName}
@@ -93,50 +122,50 @@ export default async function DashboardPage() {
 
             {/* XP & Belt Progress - 2 portions */}
             <div className="md:col-span-2">
-              <BeltProgressCard xp={userStats.totalXp} className="h-full hover:border-yellow-700/50 hover:shadow-lg transition-all duration-300" />
+              <BeltProgressCard xp={userStats.totalXp} className="h-full hover:shadow-[0_8px_24px_rgba(218,165,32,0.15)] transition-all duration-300" />
             </div>
           </div>
         </div>
       </div>
 
-      <div className="container relative py-8 sm:py-10 space-y-8">
+      <div className="container relative py-6 sm:py-8 space-y-6">
         {/* Curriculum Section Header */}
-        <div className="flex items-center justify-between gap-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-5">
           <div className="flex-1">
-            <div className="flex items-center gap-4 mb-3">
-              <div className="flex items-center gap-3">
-                <div className="w-1.5 h-12 bg-gradient-to-b from-yellow-700 to-yellow-900 rounded-full" />
-                <h2 className="text-xl sm:text-2xl font-bold text-stone-800">수련 과정</h2>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-2">
+              <div className="flex items-center gap-2.5">
+                <div className="w-1.5 h-8 sm:h-10 bg-gradient-to-b from-[#daa520] to-[#3fb950] rounded-full" />
+                <h2 className="text-lg sm:text-2xl font-bold text-[#c9d1d9]">수련 과정</h2>
               </div>
-              <div className="flex items-center gap-2 bg-white/80 border border-stone-300 px-4 py-2 rounded-sm shadow-sm">
-                <Icons.flame className="h-4 w-4 text-orange-600" />
-                <span className="text-sm font-bold text-stone-700">{userStats.currentStreak}일 연속 수련중</span>
+              <div className="hidden sm:flex items-center gap-2 bg-[#1c2128] px-3.5 py-2 rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.3)]">
+                <Icons.flame className="h-4 w-4 text-[#e3b341]" />
+                <span className="text-sm font-bold text-[#c9d1d9] font-mono">{userStats.currentStreak}일 연속 수련중</span>
               </div>
             </div>
-            <div className="flex items-center gap-5 ml-5">
-              <p className="text-stone-600 text-sm">
-                <span className="text-yellow-800 font-bold">{userStats.completedChapters}</span>
-                <span className="text-stone-500">/{totalChapters}장 완료</span>
-                <span className="text-stone-700 font-medium ml-2">({progressPercent}%)</span>
+            <div className="flex items-center gap-3 sm:gap-5 ml-4 sm:ml-5">
+              <p className="text-[#c9d1d9] text-xs sm:text-sm">
+                <span className="text-[#daa520] font-bold font-mono">{userStats.completedChapters}</span>
+                <span className="text-[#8b949e]">/{totalChapters}장</span>
+                <span className="text-[#c9d1d9] font-medium ml-1 sm:ml-2 font-mono">({progressPercent}%)</span>
               </p>
-              <div className="bg-stone-300/50 h-3 flex-1 max-w-[250px] overflow-hidden border border-stone-400/30 rounded-sm relative">
+              <div className="bg-[#21262d] h-2 sm:h-2.5 flex-1 max-w-[150px] sm:max-w-[220px] overflow-hidden rounded-md relative shadow-[inset_0_1px_3px_rgba(0,0,0,0.3)]">
                 <div
-                  className="bg-gradient-to-r from-yellow-600 to-yellow-700 h-full transition-all"
+                  className="bg-gradient-to-r from-[#daa520] to-[#3fb950] h-full transition-all"
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
             </div>
           </div>
-          <Button asChild size="lg" className="rounded-sm h-11 sm:h-12 px-6 sm:px-8 text-sm font-bold bg-stone-800 hover:bg-stone-700 text-white border-0 shadow-lg transition-all duration-300">
+          <Button asChild size="default" className="rounded-md h-9 sm:h-10 px-4 sm:px-6 text-xs sm:text-sm font-bold bg-[#daa520] hover:bg-[#e6b82e] text-[#0d1117] border-0 transition-all duration-300 w-full sm:w-auto">
             <Link href={`/curriculum/${nextChapterId}`}>
               수련하기
-              <Icons.swords className="ml-2 h-4 w-4" />
+              <Icons.swords className="ml-2 h-3.5 sm:h-4 w-3.5 sm:w-4" />
             </Link>
           </Button>
         </div>
 
         {/* Curriculum List - All 6 parts (2 columns) */}
-        <div className="grid gap-5 sm:gap-6 grid-cols-1 sm:grid-cols-2">
+        <div className="grid gap-5 grid-cols-1 sm:grid-cols-2">
           {CURRICULUM_DATA.map((part, index) => {
             const completedInPart = Math.min(
               userStats.completedChapters -
@@ -154,60 +183,60 @@ export default async function DashboardPage() {
                 href={`/curriculum?part=${part.id}`}
                 className="block group"
               >
-                <div className={`relative h-full transition-all duration-300 backdrop-blur-sm border p-6 sm:p-7 rounded-sm ${
+                <div className={`relative h-full transition-all duration-300 backdrop-blur-sm p-4 sm:p-6 rounded-lg ${
                   isActive
-                    ? 'bg-white/95 border-yellow-700/50 shadow-md'
+                    ? 'bg-[#1c2128] shadow-[0_4px_12px_rgba(0,0,0,0.35)]'
                     : isCompleted
-                      ? 'bg-stone-50/90 border-stone-400/50 shadow-sm'
-                      : 'bg-stone-100/50 border-stone-300/50 opacity-70'
-                } hover:border-stone-500 hover:shadow-lg hover:-translate-y-1`}>
+                      ? 'bg-[#1c2128]/80 shadow-[0_4px_12px_rgba(0,0,0,0.3)]'
+                      : 'bg-[#1c2128]/50 shadow-[0_4px_12px_rgba(0,0,0,0.25)] opacity-70'
+                } hover:shadow-[0_8px_24px_rgba(218,165,32,0.15)] hover:-translate-y-1`}>
 
                   {/* Part Number Badge */}
-                  <div className={`absolute -top-3 -left-2 px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-sm ${
+                  <div className={`absolute -top-2 sm:-top-2.5 -left-1.5 sm:-left-2 px-2.5 sm:px-3.5 py-1 sm:py-1.5 text-xs sm:text-sm font-bold uppercase tracking-wider rounded-md font-mono shadow-[0_2px_6px_rgba(0,0,0,0.3)] ${
                     isActive
-                      ? 'bg-stone-800 text-white shadow-md'
+                      ? 'bg-[#daa520] text-[#0d1117]'
                       : isCompleted
-                        ? 'bg-stone-600 text-white shadow-sm'
-                        : 'bg-stone-400 text-white'
+                        ? 'bg-[#3fb950] text-[#0d1117]'
+                        : 'bg-[#1c2128] text-[#8b949e]'
                   }`}>
                     Part {part.id}
                   </div>
 
-                  <div className="flex-1 min-w-0 mt-3">
-                    <div className="flex items-center gap-3 mb-3">
-                      <h3 className={`font-bold text-base transition-colors ${
+                  <div className="flex-1 min-w-0 mt-2 sm:mt-2">
+                    <div className="flex items-center gap-1.5 sm:gap-2.5 mb-1.5 sm:mb-2.5 flex-wrap">
+                      <h3 className={`font-bold text-sm sm:text-base transition-colors ${
                         isActive
-                          ? 'text-stone-800 group-hover:text-stone-900'
+                          ? 'text-[#c9d1d9] group-hover:text-[#daa520]'
                           : isCompleted
-                            ? 'text-stone-700 group-hover:text-stone-800'
-                            : 'text-stone-500 group-hover:text-stone-600'
+                            ? 'text-[#8b949e] group-hover:text-[#c9d1d9]'
+                            : 'text-[#484f58] group-hover:text-[#8b949e]'
                       }`}>
                         {part.subtitle.ko}
                       </h3>
                       {isCompleted && (
-                        <div className="flex items-center gap-1 px-2 py-0.5 bg-stone-200 border border-stone-300 rounded-sm">
-                          <Icons.check className="h-3 w-3 text-stone-600" />
-                          <span className="text-[10px] text-stone-600 font-medium uppercase tracking-wider">완료</span>
+                        <div className="flex items-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 py-0.5 bg-[#3fb950]/10 rounded-md shadow-[0_1px_3px_rgba(0,0,0,0.2)]">
+                          <Icons.check className="h-2.5 sm:h-3 w-2.5 sm:w-3 text-[#3fb950]" />
+                          <span className="text-[8px] sm:text-[10px] text-[#3fb950] font-medium uppercase tracking-wider font-mono">완료</span>
                         </div>
                       )}
                       {isActive && (
-                        <div className="flex items-center gap-1 px-2 py-0.5 bg-yellow-100 border border-yellow-300 rounded-sm">
-                          <span className="text-[10px] text-yellow-800 font-medium uppercase tracking-wider">진행중</span>
+                        <div className="flex items-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 py-0.5 bg-[#daa520]/10 rounded-md shadow-[0_1px_3px_rgba(0,0,0,0.2)]">
+                          <span className="text-[8px] sm:text-[10px] text-[#daa520] font-medium uppercase tracking-wider font-mono">진행중</span>
                         </div>
                       )}
                     </div>
-                    <p className="text-sm text-stone-500 mb-4 group-hover:text-stone-600 transition-colors">
+                    <p className="text-xs sm:text-sm text-[#8b949e] mb-2 sm:mb-4 group-hover:text-[#c9d1d9] transition-colors line-clamp-2">
                       {part.description.ko}
                     </p>
-                    <div className="flex items-center gap-4">
-                      <div className="flex-1 h-2 bg-stone-200 overflow-hidden border border-stone-300/50 rounded-sm relative">
+                    <div className="flex items-center gap-2 sm:gap-4">
+                      <div className="flex-1 h-1.5 sm:h-2 bg-[#21262d] overflow-hidden rounded-md relative shadow-[inset_0_1px_3px_rgba(0,0,0,0.3)]">
                         <div
-                          className={`h-full transition-all ${isCompleted ? 'bg-stone-500' : 'bg-yellow-700'}`}
+                          className={`h-full transition-all ${isCompleted ? 'bg-[#3fb950]' : 'bg-gradient-to-r from-[#daa520] to-[#3fb950]'}`}
                           style={{ width: `${partProgress}%` }}
                         />
                       </div>
-                      <span className={`text-sm font-mono font-bold shrink-0 ${
-                        isCompleted ? 'text-stone-600' : isActive ? 'text-yellow-800' : 'text-stone-400'
+                      <span className={`text-xs sm:text-sm font-mono font-bold shrink-0 ${
+                        isCompleted ? 'text-[#3fb950]' : isActive ? 'text-[#daa520]' : 'text-[#484f58]'
                       }`}>
                         {Math.max(0, completedInPart)}/{part.chapters.length}
                       </span>
@@ -220,36 +249,39 @@ export default async function DashboardPage() {
         </div>
 
         {/* Key Visual Banner */}
-        <div className="relative overflow-hidden border border-stone-400/50 rounded-sm shadow-lg group hover:border-stone-500 transition-all duration-300">
-          <div className="relative h-48 sm:h-64 md:h-72 bg-stone-700">
+        <div className="relative overflow-hidden rounded-lg shadow-[0_4px_16px_rgba(0,0,0,0.4)] group hover:shadow-[0_8px_24px_rgba(218,165,32,0.15)] transition-all duration-500">
+          <div className="relative h-44 sm:h-56 md:h-64 bg-[#0d1117]">
             <Image
               src="/images/bg.jpg"
               alt="VibeDojo Key Visual"
               fill
-              className="object-cover object-center opacity-60 group-hover:opacity-70 group-hover:scale-105 transition-all duration-700"
+              className="object-cover object-center opacity-50 group-hover:opacity-60 group-hover:scale-105 transition-all duration-700 saturate-[0.8]"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-stone-800/90 via-stone-800/50 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-t from-stone-800/60 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0d1117]/95 via-[#0d1117]/60 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0d1117]/70 via-transparent to-transparent" />
 
             {/* Decorative elements */}
-            <div className="absolute top-4 right-4 text-6xl font-serif text-stone-400/20 select-none">武</div>
+            <div className="absolute top-4 right-4 text-6xl sm:text-7xl md:text-8xl font-serif text-[#daa520]/10 select-none group-hover:text-[#daa520]/15 transition-all duration-500">武</div>
 
-            <div className="absolute bottom-8 sm:bottom-10 left-6 sm:left-8">
-              <p className="text-stone-100 text-lg sm:text-2xl md:text-3xl font-bold mb-3">
+            <div className="absolute bottom-6 sm:bottom-8 left-6 sm:left-8">
+              <p className="text-[#c9d1d9] text-lg sm:text-2xl md:text-3xl font-bold mb-2.5">
                 바이브 코딩의 도장, 준비됐나요?
               </p>
-              <p className="text-stone-300 text-sm sm:text-base md:text-lg mb-5">
+              <p className="text-[#8b949e] text-sm sm:text-base md:text-lg mb-4">
                 AI와 함께 코딩 무술을 익히고 검은띠에 도전하세요
               </p>
-              <Button asChild className="rounded-sm px-6 py-2.5 bg-white/20 border border-white/30 text-white hover:bg-white/30 hover:border-white/50 transition-all duration-300">
+              <Button asChild className="rounded-lg px-5 py-2 bg-[#1c2128]/90 border-0 text-[#c9d1d9] text-sm hover:bg-[#262c36] shadow-[0_2px_8px_rgba(0,0,0,0.35)] hover:shadow-[0_4px_12px_rgba(218,165,32,0.2)] hover:scale-105 transition-all duration-300">
                 <Link href="/curriculum">
-                  커리큘럼 보기
-                  <Icons.chevronRight className="ml-2 h-4 w-4" />
+                  수련 과정 보기
+                  <Icons.chevronRight className="ml-2 h-4 w-4 group-hover:translate-x-0.5 transition-transform duration-300" />
                 </Link>
               </Button>
             </div>
           </div>
         </div>
+
+        {/* Decorative bottom element */}
+        <div className="h-1 w-full bg-gradient-to-r from-[#daa520]/20 via-[#daa520]/50 to-[#daa520]/20 rounded-full" />
       </div>
     </div>
   );

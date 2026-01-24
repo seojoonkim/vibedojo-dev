@@ -56,8 +56,8 @@
   --card-foreground: #3d2c1e;
   --popover: #faf6f0;
   --popover-foreground: #3d2c1e;
-  /* 따뜻한 호박색/앰버 (도장의 황금빛 조명) */
-  --primary: #c49a4b;
+  /* 차분한 앰버/골드 (더 부드럽고 세련된 톤) */
+  --primary: #a8895a;
   --primary-foreground: #ffffff;
   /* 다다미 색상 */
   --secondary: #e8dcc8;
@@ -72,25 +72,25 @@
   /* 나무 테두리 */
   --border: #d4c4a0;
   --input: #e0d5c7;
-  --ring: #c49a4b;
-  --chart-1: #c49a4b;
+  --ring: #a8895a;
+  --chart-1: #a8895a;
   --chart-2: #8b5a2b;
   --chart-3: #a04040;
   --chart-4: #6b4423;
-  --chart-5: #d4a55a;
+  --chart-5: #daa520;
   --sidebar: #faf6f0;
   --sidebar-foreground: #3d2c1e;
-  --sidebar-primary: #c49a4b;
+  --sidebar-primary: #a8895a;
   --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: #e8dcc8;
   --sidebar-accent-foreground: #4a3728;
   --sidebar-border: #d4c4a0;
-  --sidebar-ring: #c49a4b;
+  --sidebar-ring: #a8895a;
 
-  /* Traditional Dojo gradients */
-  --gradient-dojo: linear-gradient(135deg, #c49a4b 0%, #8b5a2b 100%);
-  --gradient-belt: linear-gradient(90deg, #d4a55a 0%, #c49a4b 100%);
-  --gradient-energy: linear-gradient(135deg, #d4a55a 0%, #c49a4b 100%);
+  /* Traditional Dojo gradients - 더 차분한 톤 */
+  --gradient-dojo: linear-gradient(135deg, #a8895a 0%, #8b7550 100%);
+  --gradient-belt: linear-gradient(90deg, #c9a030 0%, #a8895a 100%);
+  --gradient-energy: linear-gradient(135deg, #c9a030 0%, #a8895a 100%);
 
   /* Wood tones for accents */
   --wood-light: #c9b896;
@@ -108,8 +108,8 @@
   --card-foreground: #3d2c1e;
   --popover: #faf6f0;
   --popover-foreground: #3d2c1e;
-  /* 앰버/황금 액센트 (도장의 따뜻한 느낌) */
-  --primary: #d97706;
+  /* 차분한 앰버/골드 액센트 (더 부드러운 톤) */
+  --primary: #b8923a;
   --primary-foreground: #ffffff;
   /* 대나무/짚 색상 */
   --secondary: #e8dfd4;
@@ -124,21 +124,21 @@
   /* 나무 테두리 */
   --border: #c9b896;
   --input: #e0d5c7;
-  --ring: #d97706;
-  --chart-1: #d97706;
-  --chart-2: #b45309;
+  --ring: #b8923a;
+  --chart-1: #b8923a;
+  --chart-2: #a57317;
   --chart-3: #15803d;
   --chart-4: #1d4ed8;
   --chart-5: #7c3aed;
   /* 사이드바 - 어두운 나무 톤 */
   --sidebar: #4a3728;
   --sidebar-foreground: #f5ebe0;
-  --sidebar-primary: #d97706;
+  --sidebar-primary: #b8923a;
   --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: #5c4637;
   --sidebar-accent-foreground: #f5ebe0;
   --sidebar-border: #6b5344;
-  --sidebar-ring: #d97706;
+  --sidebar-ring: #b8923a;
 }
 
 @layer base {
@@ -201,7 +201,7 @@
 }
 .prose h2 {
   @apply font-semibold mt-6 mb-3 pb-1.5;
-  font-size: 20px;
+  font-size: 24px;
   color: #e6edf3;
   border-bottom: 1px solid #3d444d;
 }
@@ -772,4 +772,47 @@ html {
   );
   background-size: 400% 400%;
   animation: energy-flow 8s ease infinite;
+}
+
+/* ========================================
+   Completion Celebration Animations
+   ======================================== */
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(400px) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1) rotate(180deg);
+  }
+}
+
+.animate-confetti {
+  animation: confetti-fall 3s ease-out forwards;
+}
+
+.animate-sparkle {
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+/* Hide scrollbar for horizontal scroll areas */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }

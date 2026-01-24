@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Dialog,
   DialogContent,
@@ -12,7 +13,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { createClient } from "@/lib/supabase/client";
-import { MessageSquare, X, Send, Loader2, ChevronDown, ChevronUp, Reply, Check, Trash2, AlertTriangle } from "lucide-react";
+import { MessageSquare, X, Send, Loader2, ChevronDown, ChevronUp, Reply, Check, Trash2, AlertTriangle, Award } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
 
@@ -257,6 +258,49 @@ export function ChapterQuestionsPanel({
     setDeleteConfirmId(null);
   };
 
+  // 답변 채택/채택 취소
+  const handleAcceptReply = async (replyId: string, replyUserId: string, isCurrentlyAccepted: boolean) => {
+    const supabase = createClient();
+
+    // 채택 상태 토글
+    const { error } = await supabase
+      .from("chapter_question_replies")
+      .update({ is_accepted: !isCurrentlyAccepted })
+      .eq("id", replyId);
+
+    if (error) {
+      console.error("답변 채택 실패:", error);
+      return;
+    }
+
+    if (!isCurrentlyAccepted) {
+      // 새로 채택하는 경우: 답변 작성자에게 10 XP 부여
+      await supabase.from("xp_logs").insert({
+        user_id: replyUserId,
+        amount: 10,
+        action: "answer_accepted",
+        reference_id: replyId,
+      });
+
+      await supabase.rpc("increment_xp", {
+        user_id: replyUserId,
+        amount: 10,
+      });
+    } else {
+      // 채택 취소하는 경우: 답변 작성자의 XP 차감
+      await supabase.from("xp_logs").delete()
+        .eq("action", "answer_accepted")
+        .eq("reference_id", replyId);
+
+      await supabase.rpc("increment_xp", {
+        user_id: replyUserId,
+        amount: -10,
+      });
+    }
+
+    fetchQuestions();
+  };
+
   const toggleExpanded = (questionId: string) => {
     setExpandedQuestions((prev) => {
       const next = new Set(prev);
@@ -327,7 +371,7 @@ export function ChapterQuestionsPanel({
           <div className="flex items-start justify-between gap-2">
             <div className="flex-1 min-w-0">
               <p className="text-xs text-violet-400 mb-1">선택된 텍스트</p>
-              <p className="text-[15px] text-[#e6edf3] line-clamp-2 underline decoration-[#6e7681]/50 underline-offset-2">
+              <p className="text-[15px] text-[#e6edf3] underline decoration-[#6e7681]/50 underline-offset-2">
                 &ldquo;{externalSelectedText.text}&rdquo;
               </p>
             </div>
@@ -344,7 +388,7 @@ export function ChapterQuestionsPanel({
             placeholder="이 부분에 대해 질문해주세요..."
             value={newQuestion}
             onChange={(e) => setNewQuestion(e.target.value)}
-            className="min-h-[60px] text-sm bg-[#0d1117] border-[#3d444d] text-[#e6edf3] placeholder:text-[#6e7681] resize-none focus:border-[#6e7681] focus:ring-0 focus-visible:ring-0 focus-visible:border-[#6e7681] focus-visible:outline-none"
+            className="min-h-[60px] text-sm bg-[#161b22] border-0 text-[#e6edf3] placeholder:text-[#6e7681] resize-none shadow-[inset_0_1px_4px_rgba(0,0,0,0.3)] focus:ring-2 focus:ring-violet-500/30"
             autoFocus
           />
           <Button
@@ -418,7 +462,15 @@ export function ChapterQuestionsPanel({
 
                 {/* 메타 정보 */}
                 <div className="flex items-center justify-between text-xs text-[#6e7681]">
-                  <span>{q.profiles?.display_name || q.profiles?.username}</span>
+                  <div className="flex items-center gap-1.5">
+                    <Avatar className="h-5 w-5 ring-1 ring-[#e3b341]/30">
+                      <AvatarImage src={q.profiles?.avatar_url || undefined} />
+                      <AvatarFallback className="bg-[#e3b341]/20 text-[#e3b341] text-[8px] font-mono">
+                        {(q.profiles?.username || "U").slice(0, 2).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span>{q.profiles?.display_name || q.profiles?.username}</span>
+                  </div>
                   <span>
                     {formatDistanceToNow(new Date(q.created_at), { addSuffix: true, locale: ko })}
                   </span>
@@ -498,13 +550,50 @@ export function ChapterQuestionsPanel({
               {isExpanded && hasReplies && (
                 <div className="border-t border-[#3d444d] bg-[#0d1117]">
                   {q.replies.map((reply) => (
-                    <div key={reply.id} className="p-2.5 border-b border-[#21262d] last:border-b-0">
+                    <div
+                      key={reply.id}
+                      className={`p-2.5 border-b border-[#21262d] last:border-b-0 ${
+                        reply.is_accepted ? "bg-emerald-500/5 border-l-2 border-l-emerald-500" : ""
+                      }`}
+                    >
+                      {/* 채택됨 표시 */}
+                      {reply.is_accepted && (
+                        <div className="flex items-center gap-1.5 mb-2">
+                          <Award className="h-3.5 w-3.5 text-emerald-400" />
+                          <span className="text-xs font-medium text-emerald-400">채택된 답변</span>
+                        </div>
+                      )}
                       <p className="text-sm text-[#e6edf3] mb-2">{reply.content}</p>
                       <div className="flex items-center justify-between text-xs text-[#6e7681]">
-                        <span>{reply.profiles?.display_name || reply.profiles?.username}</span>
-                        <span>
-                          {formatDistanceToNow(new Date(reply.created_at), { addSuffix: true, locale: ko })}
-                        </span>
+                        <div className="flex items-center gap-1.5">
+                          <Avatar className="h-5 w-5 ring-1 ring-[#56d364]/30">
+                            <AvatarImage src={reply.profiles?.avatar_url || undefined} />
+                            <AvatarFallback className="bg-[#56d364]/20 text-[#56d364] text-[8px] font-mono">
+                              {(reply.profiles?.username || "U").slice(0, 2).toUpperCase()}
+                            </AvatarFallback>
+                          </Avatar>
+                          <span>{reply.profiles?.display_name || reply.profiles?.username}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span>
+                            {formatDistanceToNow(new Date(reply.created_at), { addSuffix: true, locale: ko })}
+                          </span>
+                          {/* 질문자만 채택 버튼 표시 */}
+                          {currentUser?.id === q.user_id && (
+                            <button
+                              onClick={() => handleAcceptReply(reply.id, reply.user_id, reply.is_accepted)}
+                              className={`flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium transition-all ${
+                                reply.is_accepted
+                                  ? "text-emerald-400 bg-emerald-500/20 hover:bg-emerald-500/10"
+                                  : "text-[#8b949e] hover:text-emerald-400 hover:bg-emerald-500/10"
+                              }`}
+                              title={reply.is_accepted ? "채택 취소" : "이 답변 채택하기"}
+                            >
+                              <Award className="h-3 w-3" />
+                              {reply.is_accepted ? "채택됨" : "채택"}
+                            </button>
+                          )}
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -518,7 +607,7 @@ export function ChapterQuestionsPanel({
                     placeholder="답변을 입력하세요..."
                     value={replyContent}
                     onChange={(e) => setReplyContent(e.target.value)}
-                    className="w-full min-h-[50px] text-sm bg-[#0d1117] border-[#3d444d] text-[#e6edf3] placeholder:text-[#6e7681] resize-none mb-2 focus:border-[#6e7681] focus:ring-0 focus-visible:ring-0 focus-visible:border-[#6e7681] focus-visible:outline-none"
+                    className="w-full min-h-[50px] text-sm bg-[#161b22] border-0 text-[#e6edf3] placeholder:text-[#6e7681] resize-none mb-2 shadow-[inset_0_1px_4px_rgba(0,0,0,0.3)] focus:ring-2 focus:ring-violet-500/30"
                   />
                   <div className="flex justify-end gap-2">
                     <Button
