@@ -115,7 +115,7 @@ export default async function DashboardPage() {
 
         <div className="container relative py-3">
           {/* Welcome Message */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 mb-5">
+          <div className="mb-5">
             <div className="flex items-center gap-3">
               <div className="w-1.5 h-8 sm:h-10 bg-gradient-to-b from-[#daa520] to-[#58a6ff] rounded-full" />
               <div>
@@ -123,18 +123,6 @@ export default async function DashboardPage() {
                   <span className="text-[#daa520]">{userStats.displayName}</span> 수련생님, 환영합니다!
                 </h2>
                 <p className="text-xs sm:text-sm text-[#8b949e] mt-0.5">오늘도 무공을 갈고닦으러 오셨군요</p>
-              </div>
-            </div>
-            {/* Quick Stats - Mobile visible */}
-            <div className="flex items-center gap-2 sm:gap-3 ml-4 sm:ml-0">
-              <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 sm:py-2 bg-[#1c2128] rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.3)]">
-                <Icons.flame className="h-3.5 sm:h-4 w-3.5 sm:w-4 text-[#e3b341]" />
-                <span className="text-xs sm:text-sm font-bold text-[#c9d1d9] font-mono">{userStats.currentStreak}일</span>
-              </div>
-              <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 sm:py-2 bg-[#1c2128] rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.3)]">
-                <Icons.zap className="h-3.5 sm:h-4 w-3.5 sm:w-4 text-[#daa520]" />
-                <span className="text-xs sm:text-sm font-bold text-[#c9d1d9] font-mono">{userStats.totalXp}</span>
-                <span className="text-[10px] sm:text-xs text-[#8b949e]">XP</span>
               </div>
             </div>
           </div>
