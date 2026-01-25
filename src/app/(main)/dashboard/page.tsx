@@ -37,11 +37,11 @@ export default async function DashboardPage() {
     completedChaptersCount = count || 0;
   }
 
-  // Fetch activity data for heatmap (last 120 days)
+  // Fetch activity data for heatmap (last 1 year)
   let activityData: { date: string; count: number }[] = [];
   if (user) {
     const startDate = new Date();
-    startDate.setDate(startDate.getDate() - 120);
+    startDate.setDate(startDate.getDate() - 370); // ~1 year + buffer
 
     const { data: xpLogs } = await supabase
       .from("xp_logs")
