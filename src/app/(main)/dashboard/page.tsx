@@ -163,44 +163,45 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      <div className="container relative py-6 sm:py-8 space-y-6">
+      <div className="container relative py-6 sm:py-8 space-y-8">
         {/* Curriculum Section Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-5">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 sm:gap-6">
           <div className="flex-1">
-            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-2">
-              <div className="flex items-center gap-2.5">
-                <div className="w-1.5 h-8 sm:h-10 bg-gradient-to-b from-[#daa520] to-[#3fb950] rounded-full" />
-                <h2 className="text-lg sm:text-2xl font-bold text-[#c9d1d9]">수련 과정</h2>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-1.5 h-10 sm:h-12 bg-gradient-to-b from-[#daa520] to-[#3fb950] rounded-full" />
+                <h2 className="text-xl sm:text-2xl font-bold text-[#c9d1d9]">수련 과정</h2>
               </div>
               <div className="hidden sm:flex items-center gap-2 bg-[#1c2128] px-3.5 py-2 rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.3)]">
                 <Icons.flame className="h-4 w-4 text-[#e3b341]" />
                 <span className="text-sm font-bold text-[#c9d1d9] font-mono">{userStats.currentStreak}일 연속 수련중</span>
               </div>
             </div>
-            <div className="flex items-center gap-3 sm:gap-5 ml-4 sm:ml-5">
-              <p className="text-[#c9d1d9] text-xs sm:text-sm">
-                <span className="text-[#daa520] font-bold font-mono">{userStats.completedChapters}</span>
-                <span className="text-[#8b949e]">/{totalChapters}장</span>
-                <span className="text-[#c9d1d9] font-medium ml-1 sm:ml-2 font-mono">({progressPercent}%)</span>
-              </p>
-              <div className="bg-[#21262d] h-2 sm:h-2.5 flex-1 max-w-[150px] sm:max-w-[220px] overflow-hidden rounded-md relative shadow-[inset_0_1px_3px_rgba(0,0,0,0.3)]">
+            {/* Progress Stats - Bigger and More Prominent */}
+            <div className="flex items-center gap-4 sm:gap-6 ml-4 sm:ml-5">
+              <div className="flex items-baseline gap-1">
+                <span className="text-2xl sm:text-3xl font-black text-[#daa520] font-mono">{userStats.completedChapters}</span>
+                <span className="text-base sm:text-lg text-[#8b949e] font-medium">/{totalChapters}장</span>
+                <span className="text-sm sm:text-base text-[#6e7681] ml-2 font-mono">({progressPercent}%)</span>
+              </div>
+              <div className="bg-[#21262d] h-3 sm:h-4 flex-1 max-w-[280px] sm:max-w-[400px] overflow-hidden rounded-full relative shadow-[inset_0_2px_4px_rgba(0,0,0,0.4)]">
                 <div
-                  className="bg-gradient-to-r from-[#daa520] to-[#3fb950] h-full transition-all"
+                  className="bg-gradient-to-r from-[#daa520] via-[#e6b82e] to-[#3fb950] h-full transition-all duration-500 rounded-full"
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
             </div>
           </div>
-          <Button asChild size="default" className="rounded-md h-9 sm:h-10 px-4 sm:px-6 text-xs sm:text-sm font-bold bg-[#daa520] hover:bg-[#e6b82e] text-[#0d1117] border-0 transition-all duration-300 w-full sm:w-auto">
+          <Button asChild size="default" className="rounded-lg h-10 sm:h-11 px-5 sm:px-7 text-sm sm:text-base font-bold bg-[#daa520] hover:bg-[#e6b82e] text-[#0d1117] border-0 transition-all duration-300 w-full sm:w-auto shadow-[0_2px_8px_rgba(218,165,32,0.3)] hover:shadow-[0_4px_16px_rgba(218,165,32,0.4)]">
             <Link href={`/curriculum/${nextChapterId}`}>
               수련하기
-              <Icons.swords className="ml-2 h-3.5 sm:h-4 w-3.5 sm:w-4" />
+              <Icons.swords className="ml-2 h-4 sm:h-5 w-4 sm:w-5" />
             </Link>
           </Button>
         </div>
 
         {/* Curriculum List - All 6 parts (2 columns) */}
-        <div className="grid gap-5 grid-cols-1 sm:grid-cols-2">
+        <div className="grid gap-5 grid-cols-1 sm:grid-cols-2 pt-2">
           {CURRICULUM_DATA.map((part, index) => {
             const completedInPart = Math.min(
               userStats.completedChapters -
