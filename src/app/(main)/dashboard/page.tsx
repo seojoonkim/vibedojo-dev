@@ -18,51 +18,51 @@ export default async function DashboardPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // Get today's date in KST for comparison
+  const now = new Date();
+  const kstDate = new Date(now.getTime() + 9 * 60 * 60 * 1000);
+  const year = kstDate.getUTCFullYear();
+  const month = String(kstDate.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(kstDate.getUTCDate()).padStart(2, '0');
+  const todayKST = `${year}-${month}-${day}`;
+
   // Record daily login activity (only once per day in KST)
-  let recordedLoginToday = false;
+  let justRecordedLogin = false;
   if (user) {
-    const now = new Date();
-    const kstDate = new Date(now.getTime() + 9 * 60 * 60 * 1000);
-    const todayKST = kstDate.toISOString().split('T')[0]; // YYYY-MM-DD in KST
-
-    console.log('[Dashboard] Today KST:', todayKST);
-
-    // Check if already logged activity today (KST)
-    const { data: existingLog } = await supabase
+    // Check if already logged activity today (KST) - check last 2 days to be safe
+    const twoDaysAgo = new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000);
+    const { data: recentLogs } = await supabase
       .from("xp_logs")
       .select("id, created_at")
       .eq("user_id", user.id)
       .eq("action", "daily_login")
-      .order("created_at", { ascending: false })
-      .limit(1)
-      .maybeSingle();
+      .gte("created_at", twoDaysAgo.toISOString())
+      .order("created_at", { ascending: false });
 
-    console.log('[Dashboard] Existing log:', existingLog);
-
-    let shouldRecordLogin = true;
-    if (existingLog) {
-      // Convert last login to KST and check if it's today
-      const lastLoginUTC = new Date(existingLog.created_at);
-      const lastLoginKST = new Date(lastLoginUTC.getTime() + 9 * 60 * 60 * 1000);
-      const lastLoginDateKST = lastLoginKST.toISOString().split('T')[0];
-      console.log('[Dashboard] Last login date KST:', lastLoginDateKST);
-      shouldRecordLogin = lastLoginDateKST !== todayKST;
+    let hasLoggedToday = false;
+    if (recentLogs && recentLogs.length > 0) {
+      // Check if any log is from today (KST)
+      hasLoggedToday = recentLogs.some(log => {
+        const logUTC = new Date(log.created_at);
+        const logKST = new Date(logUTC.getTime() + 9 * 60 * 60 * 1000);
+        const logYear = logKST.getUTCFullYear();
+        const logMonth = String(logKST.getUTCMonth() + 1).padStart(2, '0');
+        const logDay = String(logKST.getUTCDate()).padStart(2, '0');
+        const logDateKST = `${logYear}-${logMonth}-${logDay}`;
+        return logDateKST === todayKST;
+      });
     }
 
-    console.log('[Dashboard] Should record login:', shouldRecordLogin);
-
-    if (shouldRecordLogin) {
-      const { data: insertedData, error } = await supabase.from("xp_logs").insert({
+    if (!hasLoggedToday) {
+      const { error } = await supabase.from("xp_logs").insert({
         user_id: user.id,
         action: "daily_login",
         xp_amount: 0,
         description: "일일 로그인",
-      }).select();
-
-      console.log('[Dashboard] Insert result:', { data: insertedData, error });
+      });
 
       if (!error) {
-        recordedLoginToday = true;
+        justRecordedLogin = true;
       }
     }
   }
@@ -95,6 +95,7 @@ export default async function DashboardPage() {
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - 370); // ~1 year + buffer
 
+    // Fetch all xp_logs including the one we just inserted
     const { data: xpLogs } = await supabase
       .from("xp_logs")
       .select("created_at")
@@ -102,41 +103,28 @@ export default async function DashboardPage() {
       .gte("created_at", startDate.toISOString())
       .order("created_at", { ascending: true });
 
-    console.log('[Dashboard] XP logs count:', xpLogs?.length);
+    const countByDate = new Map<string, number>();
 
-    if (xpLogs) {
-      const countByDate = new Map<string, number>();
+    if (xpLogs && xpLogs.length > 0) {
       xpLogs.forEach((log) => {
         // Convert UTC to KST (UTC+9) for proper date grouping
         const utcDate = new Date(log.created_at);
-        const kstDate = new Date(utcDate.getTime() + 9 * 60 * 60 * 1000);
-        const year = kstDate.getUTCFullYear();
-        const month = String(kstDate.getUTCMonth() + 1).padStart(2, '0');
-        const day = String(kstDate.getUTCDate()).padStart(2, '0');
-        const date = `${year}-${month}-${day}`;
+        const logKST = new Date(utcDate.getTime() + 9 * 60 * 60 * 1000);
+        const logYear = logKST.getUTCFullYear();
+        const logMonth = String(logKST.getUTCMonth() + 1).padStart(2, '0');
+        const logDay = String(logKST.getUTCDate()).padStart(2, '0');
+        const date = `${logYear}-${logMonth}-${logDay}`;
         countByDate.set(date, (countByDate.get(date) || 0) + 1);
       });
-
-      console.log('[Dashboard] Count by date before adding today:', Object.fromEntries(countByDate));
-
-      // Ensure today is included if we just recorded login (DB might not be synced yet)
-      if (recordedLoginToday) {
-        const now = new Date();
-        const kstDate = new Date(now.getTime() + 9 * 60 * 60 * 1000);
-        const year = kstDate.getUTCFullYear();
-        const month = String(kstDate.getUTCMonth() + 1).padStart(2, '0');
-        const day = String(kstDate.getUTCDate()).padStart(2, '0');
-        const todayKST = `${year}-${month}-${day}`;
-        console.log('[Dashboard] Adding today to map:', todayKST);
-        // Only add 1 if not already counted (to avoid duplicate from the fetch above)
-        if (!countByDate.has(todayKST)) {
-          countByDate.set(todayKST, 1);
-        }
-      }
-
-      activityData = Array.from(countByDate.entries()).map(([date, count]) => ({ date, count }));
-      console.log('[Dashboard] Final activity data:', activityData);
     }
+
+    // If we just recorded login, ensure today is in the map
+    // This handles replication lag or timing issues
+    if (justRecordedLogin && !countByDate.has(todayKST)) {
+      countByDate.set(todayKST, 1);
+    }
+
+    activityData = Array.from(countByDate.entries()).map(([date, count]) => ({ date, count }));
   }
 
   const userStats = {
