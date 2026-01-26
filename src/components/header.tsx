@@ -36,11 +36,14 @@ export function Header({ isLoggedIn = false }: HeaderProps) {
   };
 
   const navItems = [
-    { href: "/dashboard", label: "내 도장", labelShort: "도장" },
-    { href: "/curriculum", label: "수련 과정", labelShort: "수련" },
-    { href: "/community", label: "커뮤니티", labelShort: "커뮤니티" },
-    { href: "/leaderboard", label: "리더보드", labelShort: "리더보드" },
+    { href: "/dashboard", label: "내 도장", labelShort: "도장", requiresLogin: true },
+    { href: "/curriculum", label: "수련 과정", labelShort: "수련", requiresLogin: false },
+    { href: "/community", label: "커뮤니티", labelShort: "커뮤니티", requiresLogin: false },
+    { href: "/leaderboard", label: "리더보드", labelShort: "리더보드", requiresLogin: false },
   ];
+
+  // Filter nav items based on login status
+  const visibleNavItems = navItems.filter(item => !item.requiresLogin || isLoggedIn);
 
   const logoHref = isLoggedIn ? "/dashboard" : "/";
 
@@ -57,7 +60,7 @@ export function Header({ isLoggedIn = false }: HeaderProps) {
 
         {/* Navigation - center (desktop) */}
         <nav className="hidden md:flex items-center justify-center gap-1">
-          {navItems.map((item) => {
+          {visibleNavItems.map((item) => {
             const isActive = pathname.startsWith(item.href);
             return (
               <Link
@@ -172,7 +175,7 @@ export function Header({ isLoggedIn = false }: HeaderProps) {
                   </Link>
                 </div>
                 <nav className="flex-1 p-3 space-y-1">
-                  {navItems.map((item) => {
+                  {visibleNavItems.map((item) => {
                     const isActive = pathname.startsWith(item.href);
                     return (
                       <Link
