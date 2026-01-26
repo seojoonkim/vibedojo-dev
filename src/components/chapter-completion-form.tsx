@@ -33,6 +33,8 @@ interface ChapterCompletionFormProps {
   totalCheckboxes?: number;
   checkedCount?: number;
   areAllChecked?: boolean;
+  // Next chapter for navigation
+  nextChapterId?: string | null;
 }
 
 function StarRating({
@@ -96,6 +98,7 @@ export function ChapterCompletionForm({
   totalCheckboxes = 0,
   checkedCount = 0,
   areAllChecked = true,
+  nextChapterId,
 }: ChapterCompletionFormProps) {
   const router = useRouter();
   const [difficultyRating, setDifficultyRating] = useState(0);
@@ -186,7 +189,7 @@ export function ChapterCompletionForm({
 
         {/* Back to Curriculum Button */}
         <Button
-          onClick={() => router.push("/curriculum")}
+          onClick={() => router.push(nextChapterId ? `/curriculum?scrollTo=${nextChapterId}` : "/curriculum")}
           className="w-full h-14 text-lg font-bold rounded-md bg-gradient-to-r from-[#f0b429] to-[#c49a4b] hover:from-[#f7c948] hover:to-[#f0b429] text-[#1a120b] shadow-[0_4px_20px_rgba(240,180,41,0.4)] transition-all"
         >
           수련 과정으로 돌아가기
@@ -221,7 +224,7 @@ export function ChapterCompletionForm({
 
         {/* Back to Curriculum Button */}
         <Button
-          onClick={() => router.push("/curriculum")}
+          onClick={() => router.push(nextChapterId ? `/curriculum?scrollTo=${nextChapterId}` : "/curriculum")}
           className="w-full h-14 text-lg font-bold rounded-md bg-gradient-to-r from-[#f0b429] to-[#c49a4b] hover:from-[#f7c948] hover:to-[#f0b429] text-[#1a120b] shadow-[0_4px_20px_rgba(240,180,41,0.4)] transition-all"
         >
           수련 과정으로 돌아가기

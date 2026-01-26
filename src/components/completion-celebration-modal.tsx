@@ -19,6 +19,7 @@ interface CompletionCelebrationModalProps {
   difficultyRating: number;
   satisfactionRating: number;
   hasReview: boolean;
+  nextChapterId?: string | null;
 }
 
 // Confetti particle component
@@ -104,6 +105,7 @@ export function CompletionCelebrationModal({
   difficultyRating,
   satisfactionRating,
   hasReview,
+  nextChapterId,
 }: CompletionCelebrationModalProps) {
   const router = useRouter();
   const [showContent, setShowContent] = useState(false);
@@ -143,8 +145,12 @@ export function CompletionCelebrationModal({
 
   const handleGoToCurriculum = useCallback(() => {
     onOpenChange(false);
-    router.push("/curriculum");
-  }, [onOpenChange, router]);
+    // 다음 챕터가 있으면 해당 챕터로 스크롤
+    const url = nextChapterId
+      ? `/curriculum?scrollTo=${nextChapterId}`
+      : "/curriculum";
+    router.push(url);
+  }, [onOpenChange, router, nextChapterId]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

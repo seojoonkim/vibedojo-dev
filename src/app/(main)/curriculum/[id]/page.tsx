@@ -87,7 +87,7 @@ function InteractiveCheckbox({ itemId }: { itemId: string }) {
     >
       <Check
         className={cn(
-          "h-3 w-3 text-[#0d1117] transition-all duration-200",
+          "h-3 w-3 text-[#0a0c10] transition-all duration-200",
           isItemChecked ? "opacity-100 scale-100" : "opacity-0 scale-75"
         )}
         strokeWidth={3}
@@ -121,6 +121,7 @@ function ChecklistAwareCompletionForm({
   isCompleted,
   savedReviewData,
   onComplete,
+  nextChapterId,
 }: {
   chapter: Chapter;
   chapterTitle: string;
@@ -132,6 +133,7 @@ function ChecklistAwareCompletionForm({
     satisfactionRating: number;
     review: string;
   }) => Promise<void>;
+  nextChapterId?: string | null;
 }) {
   const { getTotalCheckboxes, getCheckedCount, areAllChecked } = useChecklistContext();
 
@@ -147,6 +149,7 @@ function ChecklistAwareCompletionForm({
       totalCheckboxes={getTotalCheckboxes()}
       checkedCount={getCheckedCount()}
       areAllChecked={areAllChecked()}
+      nextChapterId={nextChapterId}
     />
   );
 }
@@ -390,7 +393,7 @@ export default function ChapterDetailPage() {
       .insert({
         author_id: user.id,
         type: "review",
-        title: `[학습 후기] ${markdownTitle || chapter.title_ko}`,
+        title: `학습 후기 - ${markdownTitle || chapter.title_ko}`,
         content: reviewContent,
         chapter_id: chapter.id,
         difficulty_rating: data.difficultyRating,
@@ -572,7 +575,7 @@ export default function ChapterDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0d1117] flex items-center justify-center">
+      <div className="min-h-screen bg-[#0a0c10] flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-[#f0b429]" />
       </div>
     );
@@ -580,8 +583,8 @@ export default function ChapterDetailPage() {
 
   if (!chapter) {
     return (
-      <div className="min-h-screen bg-[#0d1117] flex items-center justify-center">
-        <Card className="max-w-sm mx-auto bg-[#1c2128] border-0 shadow-[0_4px_12px_rgba(0,0,0,0.35)]">
+      <div className="min-h-screen bg-[#0a0c10] flex items-center justify-center">
+        <Card className="max-w-sm mx-auto bg-[#151a21] border-0 shadow-[0_4px_12px_rgba(0,0,0,0.35)]">
           <CardContent className="py-10 text-center">
             <div className="w-14 h-14 rounded-full bg-[#21262d] flex items-center justify-center mx-auto mb-4">
               <BookOpen className="h-7 w-7 text-[#8b949e]" />
@@ -590,7 +593,7 @@ export default function ChapterDetailPage() {
             <p className="text-[#8b949e] text-sm mb-5">
               요청하신 챕터가 존재하지 않습니다.
             </p>
-            <Button asChild className="rounded-md h-10 px-5 text-sm bg-[#f0b429] hover:bg-[#f7c948] text-[#0d1117] border-0">
+            <Button asChild className="rounded-md h-10 px-5 text-sm bg-[#f0b429] hover:bg-[#f7c948] text-[#0a0c10] border-0">
               <Link href="/curriculum">수련 과정으로 돌아가기</Link>
             </Button>
           </CardContent>
@@ -603,7 +606,7 @@ export default function ChapterDetailPage() {
   const partInfo = getPartById(chapter.part);
 
   return (
-    <div className="min-h-screen bg-[#0d1117]">
+    <div className="min-h-screen bg-[#0a0c10]">
       {/* Text Selection Tooltip */}
       <TextSelectionTooltip
         containerSelector=".curriculum-content"
@@ -712,7 +715,7 @@ export default function ChapterDetailPage() {
           <div className="flex-1 min-w-0 transition-all duration-300">
             <ChecklistProvider chapterId={chapterId}>
               {/* Content */}
-              <Card className="mb-5 bg-[#1c2128] border-0 rounded-md shadow-[0_4px_12px_rgba(0,0,0,0.35)] overflow-hidden py-0 gap-0">
+              <Card className="mb-5 bg-[#151a21] border-0 rounded-md shadow-[0_4px_12px_rgba(0,0,0,0.35)] overflow-hidden py-0 gap-0">
                 <CardContent className="p-4 sm:p-5 md:p-6 curriculum-content">
                   {contentLoading ? (
                     <div className="flex flex-col items-center justify-center py-16">
@@ -724,7 +727,7 @@ export default function ChapterDetailPage() {
                       // Reset checkbox counter before rendering
                       checkboxCounterRef.current = 0;
                       return (
-                        <div className="prose prose-invert max-w-none [&>*:first-child]:mt-0 prose-headings:text-[#c9d1d9] prose-p:text-[#c9d1d9] prose-strong:text-[#c9d1d9] prose-a:text-[#79c0ff] prose-code:text-[#f0883e] prose-code:bg-[#21262d] prose-pre:bg-[#0d1117] prose-pre:border prose-pre:border-[#30363d] prose-blockquote:border-l-[#30363d] prose-blockquote:text-[#8b949e] prose-li:text-[#c9d1d9]">
+                        <div className="prose prose-invert max-w-none [&>*:first-child]:mt-0 prose-headings:text-[#c9d1d9] prose-p:text-[#c9d1d9] prose-strong:text-[#c9d1d9] prose-a:text-[#79c0ff] prose-code:text-[#f0883e] prose-code:bg-[#21262d] prose-pre:bg-[#0a0c10] prose-pre:border prose-pre:border-[#30363d] prose-blockquote:border-l-[#30363d] prose-blockquote:text-[#8b949e] prose-li:text-[#c9d1d9]">
                           <ReactMarkdown
                             remarkPlugins={[remarkGfm]}
                             rehypePlugins={[rehypeRaw]}
@@ -783,6 +786,7 @@ export default function ChapterDetailPage() {
                   isCompleted={isCompleted}
                   savedReviewData={savedReviewData}
                   onComplete={handleComplete}
+                  nextChapterId={nextChapter?.id}
                 />
               </div>
             </ChecklistProvider>
@@ -791,7 +795,7 @@ export default function ChapterDetailPage() {
             <div className="lg:hidden mt-4">
               <Button
                 variant="outline"
-                className="w-full rounded-md h-11 bg-[#1c2128] border-0 shadow-[0_4px_12px_rgba(0,0,0,0.35)] hover:bg-[#21262d] hover:shadow-[0_6px_16px_rgba(0,0,0,0.45)] text-[#c9d1d9]"
+                className="w-full rounded-md h-11 bg-[#151a21] border-0 shadow-[0_4px_12px_rgba(0,0,0,0.35)] hover:bg-[#21262d] hover:shadow-[0_6px_16px_rgba(0,0,0,0.45)] text-[#c9d1d9]"
                 onClick={() => setShowQuestionsPanel(!showQuestionsPanel)}
               >
                 <MessageSquare className="h-4 w-4 mr-2 text-[#8b949e]" />
@@ -813,7 +817,7 @@ export default function ChapterDetailPage() {
           {/* Questions Panel - Collapsible */}
           <div className="hidden lg:block w-[300px] shrink-0">
             <div className="sticky top-32 max-h-[calc(100vh-9rem)] flex flex-col">
-              <div className={`bg-[#1c2128] border-0 shadow-[0_4px_12px_rgba(0,0,0,0.35)] overflow-hidden flex flex-col transition-all duration-300 rounded-md`}>
+              <div className={`bg-[#151a21] border-0 shadow-[0_4px_12px_rgba(0,0,0,0.35)] overflow-hidden flex flex-col transition-all duration-300 rounded-md`}>
                 {/* Toggle Bar - Top */}
                 <button
                   onClick={() => setShowQuestionsPanel(!showQuestionsPanel)}
@@ -859,7 +863,7 @@ export default function ChapterDetailPage() {
         {/* Mobile Questions Panel (Expandable) */}
         {showQuestionsPanel && (
           <div className="lg:hidden mt-4 max-w-7xl mx-auto">
-            <Card className="bg-[#1c2128] border-0 rounded-md shadow-[0_4px_12px_rgba(0,0,0,0.35)] overflow-hidden py-0">
+            <Card className="bg-[#151a21] border-0 rounded-md shadow-[0_4px_12px_rgba(0,0,0,0.35)] overflow-hidden py-0">
               <CardContent className="p-4">
                 <ChapterQuestionsPanel
                   chapterId={chapterId}
@@ -886,6 +890,7 @@ export default function ChapterDetailPage() {
           difficultyRating={completionData.difficultyRating}
           satisfactionRating={completionData.satisfactionRating}
           hasReview={completionData.hasReview}
+          nextChapterId={nextChapter?.id}
         />
       )}
     </div>
