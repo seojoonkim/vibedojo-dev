@@ -96,7 +96,7 @@ export default async function LandingPage() {
         </div>
 
         <div className="absolute inset-0 flex items-center">
-          <div className="mx-auto max-w-5xl w-full px-6 sm:px-14 md:px-18 lg:px-26 xl:px-30">
+          <div className="mx-auto max-w-5xl w-full px-6 sm:px-14 md:px-18 lg:px-26 xl:px-30 2xl:ml-32">
             <div className="max-w-lg lg:max-w-xl relative z-10">
               {/* Badge */}
               <div className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 bg-[#1c2128] text-[#daa520] text-xs sm:text-sm font-medium mb-4 sm:mb-3 lg:mb-4 backdrop-blur-sm rounded-md shadow-[0_2px_8px_rgba(0,0,0,0.3)] animate-float-up opacity-0 stagger-1" style={{ animationFillMode: 'forwards' }}>
