@@ -86,6 +86,7 @@ export default async function DashboardPage() {
   // Fetch activity data for heatmap (last 1 year)
   let activityData: { date: string; count: number }[] = [];
   let debugXpLogsCount = 0;
+  let debugLogs: any[] = [];
   if (user) {
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - 370); // ~1 year + buffer
@@ -103,13 +104,22 @@ export default async function DashboardPage() {
     const countByDate = new Map<string, number>();
 
     if (xpLogs && xpLogs.length > 0) {
-      xpLogs.forEach((log) => {
+      xpLogs.forEach((log, index) => {
         // Convert UTC to KST (UTC+9) for proper date grouping
         const utcDate = new Date(log.created_at);
         const kstDate = new Date(utcDate.getTime() + 9 * 60 * 60 * 1000);
         // Use ISO string split for accurate date extraction
         const date = kstDate.toISOString().split('T')[0];
         countByDate.set(date, (countByDate.get(date) || 0) + 1);
+
+        // Debug: log first 3 and last 3 entries
+        if (index < 3 || index >= xpLogs.length - 3) {
+          debugLogs.push({
+            created_at: log.created_at,
+            action: log.action,
+            kst_date: date
+          });
+        }
       });
     }
 
@@ -121,6 +131,15 @@ export default async function DashboardPage() {
 
     activityData = Array.from(countByDate.entries()).map(([date, count]) => ({ date, count }));
   }
+
+  // Pass debug logs to frontend
+  const debugInfo = {
+    todayKST,
+    justRecordedLogin,
+    debugXpLogsCount,
+    activityDataCount: activityData.length,
+    debugLogs: debugXpLogsCount > 0 ? debugLogs : []
+  };
 
   const userStats = {
     displayName: profile?.display_name || profile?.username || user?.email?.split("@")[0] || "수련생",
@@ -203,13 +222,19 @@ export default async function DashboardPage() {
           {/* Activity Heatmap - GitHub Style */}
           <div className="mt-5 bg-[#151a21] p-5 rounded-md  shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
             {/* Debug info - remove after testing */}
-            <div className="mb-4 p-3 bg-[#0d1117] rounded text-xs text-[#8b949e] font-mono">
-              <div>🔍 디버그 정보:</div>
-              <div>- Today KST: {todayKST}</div>
-              <div>- Just recorded login: {justRecordedLogin ? 'Yes' : 'No'}</div>
-              <div>- Total xp_logs from DB: {debugXpLogsCount}</div>
-              <div>- Activity data count: {activityData.length}</div>
+            <div className="mb-4 p-3 bg-[#0d1117] rounded text-xs text-[#8b949e] font-mono overflow-auto max-h-40">
+              <div className="font-bold mb-2">🔍 디버그 정보:</div>
+              <div>- Today KST: {debugInfo.todayKST}</div>
+              <div>- Just recorded login: {debugInfo.justRecordedLogin ? 'Yes' : 'No'}</div>
+              <div>- Total xp_logs from DB: {debugInfo.debugXpLogsCount}</div>
+              <div>- Activity data count: {debugInfo.activityDataCount}</div>
               <div>- Last 5 activities: {JSON.stringify(activityData.slice(-5))}</div>
+              {debugInfo.debugLogs.length > 0 && (
+                <div className="mt-2">
+                  <div className="font-semibold">Sample logs (first 3 & last 3):</div>
+                  <pre className="text-[10px] mt-1">{JSON.stringify(debugInfo.debugLogs, null, 2)}</pre>
+                </div>
+              )}
             </div>
             <ActivityHeatmap activities={activityData} />
           </div>
