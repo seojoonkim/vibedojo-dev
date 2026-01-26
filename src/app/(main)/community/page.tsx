@@ -1101,7 +1101,7 @@ function EditPostModal({
   );
 }
 
-function InlinePostComposer({ onPostCreated, userAvatar, userInitials, userProfile }: { onPostCreated: (newPost: Post) => void; userAvatar?: string | null; userInitials?: string; userProfile?: UserProfile | null }) {
+function InlinePostComposer({ onPostCreated, userAvatar, userInitials, userProfile, currentUserId }: { onPostCreated: (newPost: Post) => void; userAvatar?: string | null; userInitials?: string; userProfile?: UserProfile | null; currentUserId: string | null }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [selectedType, setSelectedType] = useState<WritablePostType>("discussion");
   const [title, setTitle] = useState("");
@@ -1558,7 +1558,7 @@ export default function CommunityPage() {
               </div>
             </div>
 
-            <InlinePostComposer onPostCreated={(newPost) => setPosts([newPost, ...posts])} userAvatar={currentUserProfile?.avatar_url} userInitials={currentUserProfile?.username?.slice(0, 2).toUpperCase()} userProfile={currentUserProfile} />
+            <InlinePostComposer onPostCreated={(newPost) => setPosts([newPost, ...posts])} userAvatar={currentUserProfile?.avatar_url} userInitials={currentUserProfile?.username?.slice(0, 2).toUpperCase()} userProfile={currentUserProfile} currentUserId={currentUserId} />
 
             {loading ? (
               <div className="flex items-center justify-center py-20">
