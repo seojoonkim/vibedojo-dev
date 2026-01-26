@@ -46,6 +46,28 @@ export default async function LandingPage() {
             </span>
           </Link>
 
+          {/* Navigation - center (desktop) */}
+          <nav className="hidden md:flex items-center justify-center gap-1">
+            <Link
+              href="/curriculum"
+              className="relative flex items-center px-3 lg:px-4 py-1.5 text-sm lg:text-[15px] font-medium transition-all text-[#8b949e] hover:text-[#c9d1d9]"
+            >
+              수련 과정
+            </Link>
+            <Link
+              href="/community"
+              className="relative flex items-center px-3 lg:px-4 py-1.5 text-sm lg:text-[15px] font-medium transition-all text-[#8b949e] hover:text-[#c9d1d9]"
+            >
+              커뮤니티
+            </Link>
+            <Link
+              href="/leaderboard"
+              className="relative flex items-center px-3 lg:px-4 py-1.5 text-sm lg:text-[15px] font-medium transition-all text-[#8b949e] hover:text-[#c9d1d9]"
+            >
+              리더보드
+            </Link>
+          </nav>
+
           <div className="flex items-center gap-2">
             <LandingLanguageSwitcher />
             <Button
