@@ -63,6 +63,7 @@ export function Header({ isLoggedIn = false }: HeaderProps) {
               <Link
                 key={item.href}
                 href={item.href}
+                prefetch={true}
                 className={cn(
                   "relative flex items-center px-3 lg:px-4 py-1.5 text-sm lg:text-[15px] font-medium transition-all outline-none focus:outline-none focus-visible:outline-none",
                   isActive
@@ -177,6 +178,7 @@ export function Header({ isLoggedIn = false }: HeaderProps) {
                       <Link
                         key={item.href}
                         href={item.href}
+                        prefetch={true}
                         onClick={() => setIsOpen(false)}
                         className={cn(
                           "relative flex items-center px-4 py-3 text-base font-medium transition-all rounded-md",
