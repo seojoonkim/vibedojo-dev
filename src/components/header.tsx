@@ -52,8 +52,8 @@ export function Header({ isLoggedIn = false }: HeaderProps) {
       <div className="container flex h-14 items-center justify-between">
         {/* Logo - left */}
         <Link href={logoHref} className="flex items-center gap-1.5 group">
-          <Icons.vibedojoSymbol className="w-7 h-7 sm:w-8 sm:h-8 transition-transform duration-300 group-hover:scale-105" />
-          <span className="text-base sm:text-lg text-[#c9d1d9] tracking-tighter font-black group-hover:text-[#f0b429] transition-colors">
+          <Icons.vibedojoSymbol className="w-8 h-8 transition-transform duration-300 group-hover:scale-110" />
+          <span className="text-lg text-[#e6edf3] tracking-tighter font-black group-hover:text-[#daa520] transition-colors">
             VibeDojo
           </span>
         </Link>
@@ -131,14 +131,14 @@ export function Header({ isLoggedIn = false }: HeaderProps) {
                 asChild
                 variant="outline"
                 size="sm"
-                className="rounded-md h-8 px-4 text-xs font-medium border-0 text-[#c9d1d9] hover:text-[#e6edf3] bg-[#1c2128] hover:bg-[#262c36] shadow-[0_1px_3px_rgba(0,0,0,0.25)] transition-all"
+                className="rounded-md h-8 px-4 text-xs text-[#c9d1d9] bg-[#1c2128] border-0 hover:bg-[#262c36] hover:text-[#e6edf3] shadow-[0_1px_3px_rgba(0,0,0,0.25)] transition-all duration-300"
               >
                 <Link href="/login">로그인</Link>
               </Button>
               <Button
                 asChild
                 size="sm"
-                className="rounded-md h-8 px-4 text-xs font-semibold bg-[#f0b429] hover:bg-[#f7c948] text-[#0d1117] transition-all border-0"
+                className="rounded-md h-8 px-5 text-xs font-bold bg-[#daa520] text-[#0d1117] hover:bg-[#e6b82e] border-0 transition-all duration-300"
               >
                 <Link href="/signup">입문하기</Link>
               </Button>
@@ -168,8 +168,8 @@ export function Header({ isLoggedIn = false }: HeaderProps) {
                     className="flex items-center gap-1.5 group"
                     onClick={() => setIsOpen(false)}
                   >
-                    <Icons.vibedojoSymbol className="w-8 h-8 transition-transform duration-300 group-hover:scale-105" />
-                    <span className="text-lg text-[#c9d1d9] tracking-tighter font-black group-hover:text-[#f0b429] transition-colors">
+                    <Icons.vibedojoSymbol className="w-8 h-8 transition-transform duration-300 group-hover:scale-110" />
+                    <span className="text-lg text-[#e6edf3] tracking-tighter font-black group-hover:text-[#daa520] transition-colors">
                       VibeDojo
                     </span>
                   </Link>
@@ -205,7 +205,7 @@ export function Header({ isLoggedIn = false }: HeaderProps) {
                       asChild
                       variant="outline"
                       size="default"
-                      className="w-full rounded-md h-10 text-sm border-0 text-[#c9d1d9] hover:text-[#e6edf3] bg-[#1c2128] hover:bg-[#262c36] shadow-[0_2px_6px_rgba(0,0,0,0.3)] transition-all"
+                      className="w-full rounded-md h-10 text-sm text-[#c9d1d9] bg-[#1c2128] border-0 hover:bg-[#262c36] hover:text-[#e6edf3] shadow-[0_2px_6px_rgba(0,0,0,0.3)] transition-all duration-300"
                     >
                       <Link href="/login" onClick={() => setIsOpen(false)}>
                         로그인
@@ -214,7 +214,7 @@ export function Header({ isLoggedIn = false }: HeaderProps) {
                     <Button
                       asChild
                       size="default"
-                      className="w-full rounded-md h-10 text-sm font-semibold bg-[#f0b429] hover:bg-[#f7c948] text-[#0d1117] border-0 shadow-[0_2px_6px_rgba(0,0,0,0.3)]"
+                      className="w-full rounded-md h-10 text-sm font-bold bg-[#daa520] text-[#0d1117] hover:bg-[#e6b82e] border-0 shadow-[0_2px_6px_rgba(0,0,0,0.3)] transition-all duration-300"
                     >
                       <Link href="/signup" onClick={() => setIsOpen(false)}>
                         입문하기
