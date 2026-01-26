@@ -49,8 +49,8 @@ export async function updateSession(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   console.log(`[Middleware] ${pathname} - user: ${user?.email || "none"}`);
 
-  // Protected routes - only dashboard requires login
-  const protectedPaths = ["/dashboard", "/profile", "/settings"];
+  // Protected routes - only profile and settings require login redirect
+  const protectedPaths = ["/profile", "/settings"];
   const isProtectedPath = protectedPaths.some((path) =>
     pathname.startsWith(path)
   );
