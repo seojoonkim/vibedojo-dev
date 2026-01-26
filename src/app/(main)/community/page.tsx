@@ -264,7 +264,13 @@ function PostCard({
 
   const handleSubmitComment = async (parentId: string | null = null) => {
     const content = parentId ? replyContent : newComment;
-    if (!content.trim() || !currentUserId) return;
+    if (!currentUserId) {
+      if (confirm("로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?")) {
+        window.location.href = "/login";
+      }
+      return;
+    }
+    if (!content.trim()) return;
     setIsSubmitting(true);
     try {
       const supabase = createClient();
@@ -309,7 +315,12 @@ function PostCard({
   };
 
   const handleLike = async () => {
-    if (!currentUserId) return;
+    if (!currentUserId) {
+      if (confirm("로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?")) {
+        window.location.href = "/login";
+      }
+      return;
+    }
     const supabase = createClient();
 
     if (liked) {
@@ -665,7 +676,12 @@ function QuestionCard({
   }, [currentUserId, question.id]);
 
   const handleLike = async () => {
-    if (!currentUserId) return;
+    if (!currentUserId) {
+      if (confirm("로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?")) {
+        window.location.href = "/login";
+      }
+      return;
+    }
     const supabase = createClient();
 
     if (liked) {
@@ -1107,6 +1123,12 @@ function InlinePostComposer({ onPostCreated, userAvatar, userInitials, userProfi
   };
 
   const handleExpand = (type?: WritablePostType) => {
+    if (!currentUserId) {
+      if (confirm("로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?")) {
+        window.location.href = "/login";
+      }
+      return;
+    }
     setIsExpanded(true);
     if (type) setSelectedType(type);
     setTimeout(() => textareaRef.current?.focus(), 100);

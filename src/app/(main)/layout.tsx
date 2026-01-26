@@ -14,14 +14,10 @@ export default async function MainLayout({
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
-    redirect("/login");
-  }
-
   return (
     <div className="min-h-screen flex flex-col bg-[#0d1117]">
       <ScrollToTop />
-      <Header isLoggedIn={true} />
+      <Header isLoggedIn={!!user} />
       <main className="flex-1">{children}</main>
       <Footer />
     </div>

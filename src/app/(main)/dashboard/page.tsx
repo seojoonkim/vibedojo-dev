@@ -18,6 +18,31 @@ export default async function DashboardPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // If not logged in, show login prompt
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-[#0a0c10] flex items-center justify-center px-4">
+        <div className="max-w-md w-full text-center">
+          <div className="mb-6">
+            <Icons.lock className="h-16 w-16 mx-auto text-[#8b949e] mb-4" />
+            <h1 className="text-2xl font-bold text-[#c9d1d9] mb-2">로그인이 필요합니다</h1>
+            <p className="text-sm text-[#8b949e]">
+              내 도장을 확인하려면 로그인해주세요
+            </p>
+          </div>
+          <div className="space-y-3">
+            <Button asChild className="w-full rounded-md h-10 text-sm font-semibold bg-[#f0b429] hover:bg-[#f7c948] text-[#0d1117] border-0">
+              <Link href="/login">로그인</Link>
+            </Button>
+            <Button asChild variant="outline" className="w-full rounded-md h-10 text-sm border-0 text-[#c9d1d9] hover:text-[#e6edf3] bg-[#1c2128] hover:bg-[#262c36]">
+              <Link href="/signup">회원가입</Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Get today's date in KST for comparison
   const now = new Date();
   const kstNow = new Date(now.getTime() + 9 * 60 * 60 * 1000);

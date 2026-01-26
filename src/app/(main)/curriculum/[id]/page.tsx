@@ -210,6 +210,13 @@ export default function ChapterDetailPage() {
         data: { user },
       } = await supabase.auth.getUser();
 
+      if (!user) {
+        // Redirect to login if not authenticated
+        setLoading(false);
+        router.push("/login?redirect=/curriculum/" + chapterId);
+        return;
+      }
+
       if (user) {
         const { data: progressData } = await supabase
           .from("progress")
