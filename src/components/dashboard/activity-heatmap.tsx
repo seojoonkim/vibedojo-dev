@@ -134,7 +134,7 @@ export function ActivityHeatmap({ activities, className }: ActivityHeatmapProps)
   };
 
   const intensityColors = [
-    "bg-[#161b22] border border-[#21262d]",
+    "bg-[#161b22]",
     "bg-[#0e4429] border border-[#0e4429]",
     "bg-[#006d32] border border-[#006d32]",
     "bg-[#26a641] border border-[#26a641]",
