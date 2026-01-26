@@ -38,21 +38,32 @@ export async function GET(request: NextRequest) {
         refresh_token: data.session.refresh_token,
       });
 
-      // Record daily login activity (only once per day)
+      // Record daily login activity (only once per day in KST)
       const userId = data.session.user.id;
-      const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+      const now = new Date();
+      const kstDate = new Date(now.getTime() + 9 * 60 * 60 * 1000);
+      const todayKST = kstDate.toISOString().split('T')[0]; // YYYY-MM-DD in KST
 
-      // Check if already logged activity today
+      // Check if already logged activity today (KST)
       const { data: existingLog } = await supabase
         .from("xp_logs")
-        .select("id")
+        .select("id, created_at")
         .eq("user_id", userId)
         .eq("action", "daily_login")
-        .gte("created_at", `${today}T00:00:00`)
-        .lt("created_at", `${today}T23:59:59`)
+        .order("created_at", { ascending: false })
+        .limit(1)
         .maybeSingle();
 
-      if (!existingLog) {
+      let shouldRecordLogin = true;
+      if (existingLog) {
+        // Convert last login to KST and check if it's today
+        const lastLoginUTC = new Date(existingLog.created_at);
+        const lastLoginKST = new Date(lastLoginUTC.getTime() + 9 * 60 * 60 * 1000);
+        const lastLoginDateKST = lastLoginKST.toISOString().split('T')[0];
+        shouldRecordLogin = lastLoginDateKST !== todayKST;
+      }
+
+      if (shouldRecordLogin) {
         // Record login activity
         await supabase.from("xp_logs").insert({
           user_id: userId,
