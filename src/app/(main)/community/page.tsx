@@ -1540,47 +1540,6 @@ export default function CommunityPage() {
             )}
           </main>
 
-          {/* Right Sidebar */}
-          <aside className="hidden xl:block w-52 shrink-0">
-            <div className="sticky top-20 space-y-4">
-              {/* Community Stats */}
-              <div className="bg-[#151a21] rounded-md  p-4">
-                <p className="text-xs font-semibold text-[#e6edf3] mb-3 flex items-center gap-2">
-                  <Zap className="h-3.5 w-3.5 text-[#f0b429]" />
-                  커뮤니티 현황
-                </p>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between py-2.5 px-3 bg-[#0a0c10]/60 rounded-md border border-[#21262d]/50">
-                    <span className="text-[11px] text-[#8b949e]">게시글</span>
-                    <span className="text-sm font-semibold text-[#e6edf3]">{feedItems.length}</span>
-                  </div>
-                  <div className="flex items-center justify-between py-2.5 px-3 bg-[#0a0c10]/60 rounded-md border border-[#21262d]/50">
-                    <span className="text-[11px] text-[#8b949e]">학습 질문</span>
-                    <span className="text-sm font-semibold text-[#f0b429]">
-                      {feedItems.filter(i => i.type === "question").length}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between py-2.5 px-3 bg-[#0a0c10]/60 rounded-md border border-[#21262d]/50">
-                    <span className="text-[11px] text-[#8b949e]">일반 질문</span>
-                    <span className="text-sm font-semibold text-[#e3b341]">
-                      {feedItems.filter(i => i.type === "post" && i.data.type === "question").length}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Tip Card */}
-              <div className="bg-[#151a21] rounded-md  p-4">
-                <p className="text-xs font-semibold text-[#e6edf3] mb-2 flex items-center gap-2">
-                  <Lightbulb className="h-3.5 w-3.5 text-[#e3b341]" />
-                  오늘의 팁
-                </p>
-                <p className="text-xs text-[#8b949e] leading-relaxed">
-                  학습 중 궁금한 부분의 텍스트를 선택하면 바로 질문할 수 있어요!
-                </p>
-              </div>
-            </div>
-          </aside>
         </div>
       </div>
 
