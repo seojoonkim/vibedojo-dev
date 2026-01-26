@@ -115,7 +115,7 @@ export default async function CurriculumPage() {
       <div className="container relative py-3 sm:py-4">
         <Tabs defaultValue="all" className="space-y-4">
           {/* Mobile: horizontal scrollable, Desktop: wrapped */}
-          <TabsList className="bg-[#151a21] backdrop-blur-sm rounded-md p-1.5 sm:p-2 h-auto shadow-[0_4px_12px_rgba(0,0,0,0.35)] flex gap-1.5 sm:gap-2 overflow-x-auto sm:flex-wrap scrollbar-hide">
+          <TabsList className="bg-[#1c2128] backdrop-blur-sm rounded-md p-1.5 sm:p-2 h-auto shadow-[0_4px_12px_rgba(0,0,0,0.35)] flex gap-1.5 sm:gap-2 overflow-x-auto sm:flex-wrap scrollbar-hide">
             <TabsTrigger
               value="all"
               className="rounded-md h-8 sm:h-9 px-3 sm:px-4 text-xs sm:text-sm data-[state=active]:bg-[#f0b429] data-[state=active]:text-[#0a0c10] text-[#8b949e] hover:text-[#c9d1d9] transition-all border-0 shrink-0"
@@ -169,7 +169,7 @@ export default async function CurriculumPage() {
 
                       {/* Complete Badge */}
                       {isPartComplete && (
-                        <div className="absolute top-2 sm:top-3 right-2 sm:right-3 flex items-center gap-1 px-1.5 sm:px-2 py-0.5 sm:py-1 bg-[#151a21]/80 backdrop-blur-sm rounded-md shadow-[0_2px_8px_rgba(86,211,100,0.2)]">
+                        <div className="absolute top-2 sm:top-3 right-2 sm:right-3 flex items-center gap-1 px-1.5 sm:px-2 py-0.5 sm:py-1 bg-[#1c2128]/80 backdrop-blur-sm rounded-md shadow-[0_2px_8px_rgba(86,211,100,0.2)]">
                           <Icons.check className="h-2.5 sm:h-3 w-2.5 sm:w-3 text-[#56d364]" />
                           <span className="text-[8px] sm:text-[10px] font-medium text-[#56d364] uppercase tracking-wider font-mono">완료</span>
                         </div>
@@ -206,7 +206,7 @@ export default async function CurriculumPage() {
                   </div>
 
                   {/* Chapters */}
-                  <div className="grid gap-2 sm:gap-3 pl-0 sm:pl-10">
+                  <div className="grid gap-3 sm:gap-4 pl-0 sm:pl-10">
                     {part.chapters.map((chapter, chapterIndex) => {
                       const status = getChapterStatus(chapter.id);
                       const isCompleted = status === "completed";
@@ -216,10 +216,10 @@ export default async function CurriculumPage() {
                       const ChapterContent = (
                         <div className={`relative transition-all duration-300 overflow-hidden flex group rounded-md ${
                           isActive
-                            ? 'bg-[#151a21] shadow-[0_4px_16px_rgba(240,180,41,0.2),0_4px_16px_rgba(0,0,0,0.4)]'
+                            ? 'bg-[#1c2128] shadow-[0_4px_16px_rgba(240,180,41,0.2),0_4px_16px_rgba(0,0,0,0.4)]'
                             : isCompleted
-                              ? 'bg-[#151a21]/80 shadow-[0_4px_12px_rgba(86,211,100,0.15),0_4px_12px_rgba(0,0,0,0.35)]'
-                              : 'bg-[#151a21]/50 shadow-[0_4px_12px_rgba(0,0,0,0.25)] opacity-50'
+                              ? 'bg-[#1c2128]/80 shadow-[0_4px_12px_rgba(86,211,100,0.15),0_4px_12px_rgba(0,0,0,0.35)]'
+                              : 'bg-[#1c2128]/50 shadow-[0_4px_12px_rgba(0,0,0,0.25)] opacity-50'
                         } ${!isNotStarted ? 'hover:shadow-[0_8px_24px_rgba(240,180,41,0.15)] hover:-translate-y-0.5' : 'cursor-not-allowed'}`}>
 
                           {/* Chapter Number Area */}
@@ -360,7 +360,7 @@ export default async function CurriculumPage() {
 
                       {/* Complete Badge */}
                       {isPartComplete && (
-                        <div className="absolute top-2 sm:top-3 right-2 sm:right-3 flex items-center gap-1 px-1.5 sm:px-2 py-0.5 sm:py-1 bg-[#151a21]/80 backdrop-blur-sm rounded-md shadow-[0_2px_8px_rgba(86,211,100,0.2)]">
+                        <div className="absolute top-2 sm:top-3 right-2 sm:right-3 flex items-center gap-1 px-1.5 sm:px-2 py-0.5 sm:py-1 bg-[#1c2128]/80 backdrop-blur-sm rounded-md shadow-[0_2px_8px_rgba(86,211,100,0.2)]">
                           <Icons.check className="h-2.5 sm:h-3 w-2.5 sm:w-3 text-[#56d364]" />
                           <span className="text-[8px] sm:text-[10px] font-medium text-[#56d364] uppercase tracking-wider font-mono">완료</span>
                         </div>
@@ -397,7 +397,7 @@ export default async function CurriculumPage() {
                   </div>
 
                   {/* Chapters Grid */}
-                  <div className="grid gap-2 sm:gap-3 pl-0 sm:pl-10">
+                  <div className="grid gap-3 sm:gap-4 pl-0 sm:pl-10">
                     {part.chapters.map((chapter) => {
                       const status = getChapterStatus(chapter.id);
                       const isCompleted = status === "completed";
@@ -407,10 +407,10 @@ export default async function CurriculumPage() {
                       const ChapterContent = (
                         <div className={`relative transition-all duration-300 overflow-hidden flex group rounded-md ${
                           isActive
-                            ? 'bg-[#151a21] shadow-[0_4px_16px_rgba(240,180,41,0.2),0_4px_16px_rgba(0,0,0,0.4)]'
+                            ? 'bg-[#1c2128] shadow-[0_4px_16px_rgba(240,180,41,0.2),0_4px_16px_rgba(0,0,0,0.4)]'
                             : isCompleted
-                              ? 'bg-[#151a21]/80 shadow-[0_4px_12px_rgba(86,211,100,0.15),0_4px_12px_rgba(0,0,0,0.35)]'
-                              : 'bg-[#151a21]/50 shadow-[0_4px_12px_rgba(0,0,0,0.25)] opacity-50'
+                              ? 'bg-[#1c2128]/80 shadow-[0_4px_12px_rgba(86,211,100,0.15),0_4px_12px_rgba(0,0,0,0.35)]'
+                              : 'bg-[#1c2128]/50 shadow-[0_4px_12px_rgba(0,0,0,0.25)] opacity-50'
                         } ${!isNotStarted ? 'hover:shadow-[0_8px_24px_rgba(240,180,41,0.15)] hover:-translate-y-0.5' : 'cursor-not-allowed'}`}>
 
                           {/* Chapter Number Area */}
