@@ -39,6 +39,7 @@ import {
   Code2,
   Zap,
   Award,
+  Lock,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { BeltBadge } from "@/components/gamification/belt-badge";
@@ -1110,6 +1111,7 @@ function InlinePostComposer({ onPostCreated, userAvatar, userInitials, userProfi
   const [githubRepo, setGithubRepo] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const resetForm = () => {
@@ -1124,9 +1126,7 @@ function InlinePostComposer({ onPostCreated, userAvatar, userInitials, userProfi
 
   const handleExpand = (type?: WritablePostType) => {
     if (!currentUserId) {
-      if (confirm("로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?")) {
-        window.location.href = "/login";
-      }
+      setShowLoginModal(true);
       return;
     }
     setIsExpanded(true);
@@ -1330,6 +1330,45 @@ function InlinePostComposer({ onPostCreated, userAvatar, userInitials, userProfi
           </div>
         </div>
       )}
+
+      {/* Login Required Modal */}
+      <Dialog open={showLoginModal} onOpenChange={setShowLoginModal}>
+        <DialogContent className="max-w-md bg-[#1c2128] border-0 rounded-md shadow-[0_8px_32px_rgba(0,0,0,0.6)]">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold text-[#c9d1d9] text-center">
+              도장 입문이 필요합니다
+            </DialogTitle>
+          </DialogHeader>
+          <div className="py-6 text-center space-y-4">
+            <div className="mx-auto w-16 h-16 rounded-full bg-[#f0b429]/10 flex items-center justify-center mb-4">
+              <Lock className="h-8 w-8 text-[#f0b429]" />
+            </div>
+            <p className="text-[#8b949e] text-sm">
+              커뮤니티에 글을 작성하려면 VibeDojo에<br />
+              로그인하거나 입문해주세요
+            </p>
+          </div>
+          <div className="flex gap-3">
+            <Button
+              asChild
+              variant="outline"
+              className="flex-1 rounded-md h-10 text-sm border-0 text-[#c9d1d9] hover:text-[#e6edf3] bg-[#21262d] hover:bg-[#262c36]"
+            >
+              <Link href="/login?redirect=/community">
+                로그인
+              </Link>
+            </Button>
+            <Button
+              asChild
+              className="flex-1 rounded-md h-10 text-sm font-semibold bg-[#f0b429] hover:bg-[#f7c948] text-[#0d1117] border-0"
+            >
+              <Link href="/signup?redirect=/community">
+                입문하기
+              </Link>
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
