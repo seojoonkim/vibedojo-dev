@@ -1325,8 +1325,30 @@ export default function CommunityPage() {
   const [currentUserProfile, setCurrentUserProfile] = useState<UserProfile | null>(null);
   const [savedPostIds, setSavedPostIds] = useState<Set<string>>(new Set());
 
-  const fetchData = async () => {
+  const fetchData = async (useCache = true) => {
     const supabase = createClient();
+
+    // Try to load from cache first
+    if (useCache && typeof window !== "undefined") {
+      try {
+        const cached = sessionStorage.getItem("community_data");
+        if (cached) {
+          const { posts: cachedPosts, questions: cachedQuestions, timestamp } = JSON.parse(cached);
+          // Use cache if it's less than 2 minutes old
+          if (Date.now() - timestamp < 120000) {
+            setPosts(cachedPosts);
+            setChapterQuestions(cachedQuestions);
+            setLoading(false);
+            // Still fetch fresh data in background
+            fetchData(false);
+            return;
+          }
+        }
+      } catch (e) {
+        // Ignore cache errors
+      }
+    }
+
     setLoading(true);
 
     const { data: { user } } = await supabase.auth.getUser();
@@ -1345,9 +1367,27 @@ export default function CommunityPage() {
     }
 
     const { data: postsData } = await supabase.from("posts").select(`*, profiles:author_id(username, display_name, avatar_url), chapters:chapter_id(title_ko)`).order("created_at", { ascending: false }).limit(50);
-    if (postsData) setPosts(postsData as Post[]);
+    if (postsData) {
+      setPosts(postsData as Post[]);
+    }
     const { data: questionsData } = await supabase.from("chapter_questions").select(`*, profiles:user_id(username, display_name, avatar_url), chapters:chapter_id(title_ko), replies:chapter_question_replies(id, user_id, content, is_accepted, created_at, profiles:user_id(username, display_name, avatar_url))`).order("created_at", { ascending: false }).limit(50);
-    if (questionsData) setChapterQuestions(questionsData as ChapterQuestion[]);
+    if (questionsData) {
+      setChapterQuestions(questionsData as ChapterQuestion[]);
+    }
+
+    // Save to cache
+    if (useCache === false && typeof window !== "undefined" && postsData && questionsData) {
+      try {
+        sessionStorage.setItem("community_data", JSON.stringify({
+          posts: postsData,
+          questions: questionsData,
+          timestamp: Date.now()
+        }));
+      } catch (e) {
+        // Ignore cache errors (quota exceeded, etc.)
+      }
+    }
+
     setLoading(false);
   };
 
@@ -1408,7 +1448,7 @@ export default function CommunityPage() {
       {/* Header */}
       <div className="container pt-5">
         <div className="flex items-center gap-3 mb-3 pb-3 shadow-[0_1px_0_rgba(255,255,255,0.03)]">
-          <div className="p-2.5 bg-[#daa520]/15 rounded-md border border-[#daa520]/20">
+          <div className="p-2.5 bg-[#daa520]/10 rounded-md shadow-[0_2px_6px_rgba(0,0,0,0.25)]">
             <Terminal className="h-5 w-5 text-[#daa520]" />
           </div>
           <div>
