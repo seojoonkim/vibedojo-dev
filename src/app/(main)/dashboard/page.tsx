@@ -91,6 +91,7 @@ export default async function DashboardPage() {
 
   // Fetch activity data for heatmap (last 1 year)
   let activityData: { date: string; count: number }[] = [];
+  let debugXpLogsCount = 0;
   if (user) {
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - 370); // ~1 year + buffer
@@ -98,10 +99,12 @@ export default async function DashboardPage() {
     // Fetch all xp_logs including the one we just inserted
     const { data: xpLogs } = await supabase
       .from("xp_logs")
-      .select("created_at")
+      .select("created_at, action")
       .eq("user_id", user.id)
       .gte("created_at", startDate.toISOString())
       .order("created_at", { ascending: true });
+
+    debugXpLogsCount = xpLogs?.length || 0;
 
     const countByDate = new Map<string, number>();
 
@@ -207,6 +210,15 @@ export default async function DashboardPage() {
 
           {/* Activity Heatmap - GitHub Style */}
           <div className="mt-5 bg-[#151a21] p-5 rounded-md  shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
+            {/* Debug info - remove after testing */}
+            <div className="mb-4 p-3 bg-[#0d1117] rounded text-xs text-[#8b949e] font-mono">
+              <div>🔍 디버그 정보:</div>
+              <div>- Today KST: {todayKST}</div>
+              <div>- Just recorded login: {justRecordedLogin ? 'Yes' : 'No'}</div>
+              <div>- Total xp_logs from DB: {debugXpLogsCount}</div>
+              <div>- Activity data count: {activityData.length}</div>
+              <div>- Last 5 activities: {JSON.stringify(activityData.slice(-5))}</div>
+            </div>
             <ActivityHeatmap activities={activityData} />
           </div>
         </div>
