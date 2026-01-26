@@ -61,7 +61,7 @@ export default async function DashboardPage() {
       const { data: insertedLog, error: insertError } = await supabase.from("xp_logs").insert({
         user_id: user.id,
         action: "daily_login",
-        xp_amount: 0,
+        amount: 0,
       }).select();
 
       loginDebugInfo.insertAttempted = true;

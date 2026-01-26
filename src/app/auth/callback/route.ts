@@ -70,7 +70,7 @@ export async function GET(request: NextRequest) {
         await supabase.from("xp_logs").insert({
           user_id: userId,
           action: "daily_login",
-          xp_amount: 0,
+          amount: 0,
         });
       }
 
