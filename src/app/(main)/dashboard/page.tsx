@@ -25,6 +25,7 @@ export default async function DashboardPage() {
 
   // Record daily login activity (only once per day in KST)
   let justRecordedLogin = false;
+  let loginDebugInfo: any = {};
   if (user) {
     // Check if already logged activity today (KST) - check last 7 days for debugging
     const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -36,7 +37,12 @@ export default async function DashboardPage() {
       .gte("created_at", sevenDaysAgo.toISOString())
       .order("created_at", { ascending: false });
 
-    console.log('[Dashboard] Recent daily_login logs:', recentLogs, 'Error:', recentLogsError);
+    loginDebugInfo.recentLogsCount = recentLogs?.length || 0;
+    loginDebugInfo.recentLogsError = recentLogsError?.message;
+    loginDebugInfo.recentLogs = recentLogs?.map(log => ({
+      created_at: log.created_at,
+      kst_date: new Date(new Date(log.created_at).getTime() + 9 * 60 * 60 * 1000).toISOString().split('T')[0]
+    }));
 
     let hasLoggedToday = false;
     if (recentLogs && recentLogs.length > 0) {
@@ -49,7 +55,7 @@ export default async function DashboardPage() {
       });
     }
 
-    console.log('[Dashboard] Has logged today:', hasLoggedToday, 'Today KST:', todayKST);
+    loginDebugInfo.hasLoggedToday = hasLoggedToday;
 
     if (!hasLoggedToday) {
       const { data: insertedLog, error: insertError } = await supabase.from("xp_logs").insert({
@@ -59,11 +65,17 @@ export default async function DashboardPage() {
         description: "일일 로그인",
       }).select();
 
-      console.log('[Dashboard] Insert daily_login result:', { insertedLog, insertError });
+      loginDebugInfo.insertAttempted = true;
+      loginDebugInfo.insertError = insertError?.message;
+      loginDebugInfo.insertSuccess = !!insertedLog;
+      loginDebugInfo.insertedLog = insertedLog;
 
       if (!insertError && insertedLog) {
         justRecordedLogin = true;
       }
+    } else {
+      loginDebugInfo.insertAttempted = false;
+      loginDebugInfo.reason = "Already logged today";
     }
   }
 
@@ -145,7 +157,8 @@ export default async function DashboardPage() {
     debugXpLogsCount,
     activityDataCount: activityData.length,
     debugLogs: debugXpLogsCount > 0 ? debugLogs : [],
-    allDates: activityData.map(a => a.date).sort()
+    allDates: activityData.map(a => a.date).sort(),
+    loginDebug: loginDebugInfo
   };
 
   const userStats = {
@@ -229,7 +242,7 @@ export default async function DashboardPage() {
           {/* Activity Heatmap - GitHub Style */}
           <div className="mt-5 bg-[#151a21] p-5 rounded-md  shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
             {/* Debug info - remove after testing */}
-            <div className="mb-4 p-3 bg-[#0d1117] rounded text-xs text-[#8b949e] font-mono overflow-auto max-h-60">
+            <div className="mb-4 p-3 bg-[#0d1117] rounded text-xs text-[#8b949e] font-mono overflow-auto max-h-80">
               <div className="font-bold mb-2">🔍 디버그 정보:</div>
               <div>- Today KST: {debugInfo.todayKST}</div>
               <div>- Just recorded login: {debugInfo.justRecordedLogin ? 'Yes' : 'No'}</div>
@@ -237,7 +250,14 @@ export default async function DashboardPage() {
               <div>- Activity data count: {debugInfo.activityDataCount}</div>
               <div>- All dates with activity: {JSON.stringify(debugInfo.allDates)}</div>
               <div>- Last 5 activities: {JSON.stringify(activityData.slice(-5))}</div>
-              <div className="mt-2 text-yellow-400">⚠️ 서버 콘솔에서 daily_login 로그 확인 필요</div>
+
+              {debugInfo.loginDebug && Object.keys(debugInfo.loginDebug).length > 0 && (
+                <div className="mt-3 p-2 bg-[#1c2128] rounded">
+                  <div className="font-bold text-yellow-400 mb-1">📝 Daily Login 디버그:</div>
+                  <pre className="text-[10px] whitespace-pre-wrap">{JSON.stringify(debugInfo.loginDebug, null, 2)}</pre>
+                </div>
+              )}
+
               {debugInfo.debugLogs.length > 0 && (
                 <div className="mt-2">
                   <div className="font-semibold">Sample logs (first 3 & last 3):</div>
