@@ -182,7 +182,7 @@ export default async function DashboardPage() {
           {/* 1:2 Layout - Character : XP Progress */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Character Card - 1 portion */}
-            <div className="relative bg-[#151a21] p-5 rounded-md  shadow-[0_4px_12px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.4)]  transition-all duration-300 group">
+            <div className="relative bg-[#1c2128] p-5 rounded-md shadow-[0_4px_12px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_24px_rgba(218,165,32,0.1)] transition-all duration-300 group">
               <CharacterDisplay
                 initialCharacterId={userStats.characterId}
                 displayName={userStats.displayName}
@@ -197,7 +197,7 @@ export default async function DashboardPage() {
           </div>
 
           {/* Activity Heatmap - GitHub Style */}
-          <div className="mt-5 bg-[#151a21] p-5 rounded-md  shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
+          <div className="mt-5 bg-[#1c2128] p-5 rounded-md shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
             <ActivityHeatmap activities={activityData} />
           </div>
         </div>
@@ -260,11 +260,11 @@ export default async function DashboardPage() {
               >
                 <div className={`relative h-full transition-all duration-300 backdrop-blur-sm p-4 sm:p-6 rounded-md border ${
                   isActive
-                    ? 'bg-[#151a21] border-[#30363d]/60 shadow-[0_4px_12px_rgba(0,0,0,0.3)]'
+                    ? 'bg-[#1c2128] border-[#30363d] shadow-[0_4px_12px_rgba(0,0,0,0.3)]'
                     : isCompleted
-                      ? 'bg-[#151a21]/80 border-[#21262d]/50 shadow-[0_4px_12px_rgba(0,0,0,0.25)]'
-                      : 'bg-[#151a21]/50 border-[#21262d]/30 shadow-[0_4px_12px_rgba(0,0,0,0.2)] opacity-70'
-                } hover:shadow-[0_8px_24px_rgba(0,0,0,0.4)] hover:border-[#30363d]/80 hover:-translate-y-0.5`}>
+                      ? 'bg-[#1a1f26] border-[#2d333b] shadow-[0_4px_12px_rgba(0,0,0,0.25)]'
+                      : 'bg-[#161b22] border-[#21262d] shadow-[0_4px_12px_rgba(0,0,0,0.2)] opacity-80'
+                } hover:shadow-[0_8px_24px_rgba(218,165,32,0.1)] hover:border-[#daa520]/30 hover:-translate-y-0.5`}>
 
                   {/* Part Number Badge */}
                   <div className={`absolute -top-2 sm:-top-2.5 -left-1.5 sm:-left-2 px-2 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-md font-mono shadow-[0_2px_6px_rgba(0,0,0,0.4)] ${
