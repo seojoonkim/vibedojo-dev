@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import crypto from "crypto";
 
+export const runtime = "nodejs";
+
 interface NotifyRequest {
   chapter_num: number;
   chapter_title: string;
