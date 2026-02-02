@@ -481,8 +481,7 @@ function PostCard({
         <div className="flex gap-1">
           <button
             onClick={handleLike}
-            disabled={!currentUserId}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#1c2128] ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all hover:bg-[#1c2128] ${
               liked ? "text-[#f85149]" : "text-[#8b949e] hover:text-[#c9d1d9]"
             }`}
           >

@@ -256,7 +256,7 @@ export default function CoursesPage() {
           </div>
           <div className="flex flex-col items-center gap-0.5 sm:gap-1 order-last sm:order-none">
             <p className="text-xs sm:text-sm text-[#484f58]">
-              © 2025 VibeDojo. All rights reserved.
+              © 2026 VibeDojo. All rights reserved.
             </p>
             <p className="text-xs sm:text-sm text-[#a8b2bd]">
               Powered by{" "}
